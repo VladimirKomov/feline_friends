@@ -20,19 +20,33 @@ export async function addUserAndHashpwd(user, hashpwd) {
             throw new Error('User with this username or email already exists');
         }
 
-        const userData = await trx("users").insert(user).returning("username");
-        await trx("hashpwd").insert(hashpwd);
+        // create user and get id
+        const [userId] = await trx("users").insert(user).returning("id");
+        console.log('added user=', userId);
+        // add id userId from db, password_hash
+        await trx("hashpwd").insert({
+            user_id: userId.id,
+            password_hash: hashpwd.password_hash
+        });
 
         await trx.commit();
 
+        // data for return
+        const userData = {
+            ...user,
+            id: userId.id
+        };
+
         console.log('addUser to db: ', JSON.stringify(userData));
         return userData;
+
     } catch (error) {
         await trx.rollback();
-        console.error('error addUser to db: ', error);
+        console.error('Error adding user to db: ', error);
         throw error;
     }
 };
+
 
 export async function fetchHashpwd(userHashpwd) {
     try {

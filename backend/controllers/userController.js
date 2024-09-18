@@ -21,6 +21,7 @@ export const createUser = async (req, res, next) => {
     try {
         const { email, name, username, password } = req.body;
 
+        console.log('Creating new user: ', email, name, username, password);
         // all good?
         if (!email || !name || !username || !password) {
             return res.status(400).json({ success: false, error: "All fields are required" });
@@ -35,7 +36,7 @@ export const createUser = async (req, res, next) => {
         };
         const userCredentials = {
             username,
-            password: hashedPassword
+            password_hash: hashedPassword
         };
         const userData = await addUserAndHashpwd(user, userCredentials);
 
