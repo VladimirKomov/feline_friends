@@ -13,26 +13,41 @@ async function checkUserExists(trx, username, email) {
 export async function addUserAndHashpwd(user, hashpwd) {
     const trx = await db.transaction(); //start transaction
     try {
+        // Check if the user with the given username or email already exists
         const userExists = await checkUserExists(trx, user.username, user.email);
 
         if (userExists) {
-            await trx.rollback();
+            await trx.rollback(); // Rollback the transaction if the user already exists
             throw new Error('User with this username or email already exists');
         }
 
-        const userData = await trx("users").insert(user).returning("username");
-        await trx("hashpwd").insert(hashpwd);
+        // Insert the user into the "users" table and return the new user ID
+        const [userId] = await trx("users").insert(user).returning("id");
+        console.log('added user=', userId);
+        // Insert the hashed password into the "hashpwd" table
+        await trx("hashpwd").insert({
+            user_id: userId.id,
+            password_hash: hashpwd.password_hash
+        });
 
-        await trx.commit();
+        await trx.commit(); // Commit the transaction if everything succeeds
+
+        // Prepare the user data object to return
+        const userData = {
+            ...user,
+            id: userId.id
+        };
 
         console.log('addUser to db: ', JSON.stringify(userData));
-        return userData;
+        return userData; // Return the user data to the caller
+
     } catch (error) {
-        await trx.rollback();
-        console.error('error addUser to db: ', error);
-        throw error;
+        await trx.rollback(); // Rollback the transaction if an error occurs
+        console.error('Error adding user to db: ', error);
+        throw error; // Re-throw the error to propagate it further
     }
 };
+
 
 export async function fetchHashpwd(userHashpwd) {
     try {
@@ -54,8 +69,7 @@ export async function fetchHashpwd(userHashpwd) {
 
 export async function fetchAllUsers() {
     try {
-        const data = await db("users").select("*");
-        return data;
+        return await db("users").select("*");
     } catch (error) {
         console.error('fetchAllUsers error: ', error);
         throw error;
@@ -64,10 +78,9 @@ export async function fetchAllUsers() {
 
 export async function fetchUserById(userId) {
     try {
-        const data = await db("users")
+        return await db("users")
             .where('id', userId)
             .first();
-        return data;
     } catch (error) {
         console.error('fetchUserById error: ', error);
         throw error;
@@ -76,11 +89,10 @@ export async function fetchUserById(userId) {
 
 export async function updateUser(userId, user) {
     try {
-        const data = await db("users")
+        return  await db("users")
             .where('id', userId)
             .update(user)
             .returning('*');
-        return data;
     } catch (error) {
         console.error('updateUser error: ', error);
         throw error;
