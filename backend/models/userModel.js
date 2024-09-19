@@ -48,18 +48,27 @@ export async function addUserAndHashpwd(user, hashpwd) {
     }
 };
 
-
-export async function fetchHashpwd(userHashpwd) {
+export async function fetchUserByNameOrEmail(user) {
     try {
-        const data = await db("hashpwd")
-            .where(userHashpwd)
+        const user = await db('users')
+            .where('username', user.usernameOrEmail)
+            .orWhere('email', user.usernameOrEmail)
             .first();
-        if (!data) {
-            console.log('User not found: ', userHashpwd);
-            return null;
-        } else {
-            console.log('User found: ', data);
-        }
+
+        return data;
+    } catch (error) {
+        console.error('fetchHashpwd error: ', error);
+        throw error;
+    }
+};
+
+export async function fetchHashpwd(user) {
+    try {
+        const user = await db('users')
+            .where('username', user.usernameOrEmail)
+            .orWhere('email', user.usernameOrEmail)
+            .first();
+
         return data;
     } catch (error) {
         console.error('fetchHashpwd error: ', error);
