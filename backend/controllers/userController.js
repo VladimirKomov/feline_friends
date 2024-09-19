@@ -47,6 +47,7 @@ export const createUser = async (req, res, next) => {
     }
 };
 
+//log in
 export const getHashpwd = async (req, res, next) => {
     try {
         const userReq = req.body;

@@ -48,57 +48,64 @@ export async function addUserAndHashpwd(user, hashpwd) {
     }
 }
 
+// Function to fetch a user by either username or email from the 'users' table
 export async function fetchUserByNameOrEmail(usernameOrEmail) {
     try {
-        return  await db('users')
+        // Query the 'users' table where username or email matches the input, return the first result
+        return await db('users')
             .where('username', usernameOrEmail)
             .orWhere('email', usernameOrEmail)
             .first();
     } catch (error) {
-        console.error('fetchHashpwd error: ', error);
+        // Log any errors encountered during the query
+        console.error('fetchUserByNameOrEmail error: ', error);
         throw error;
     }
 }
 
+// Function to fetch hashed password by user id from the 'hashpwd' table
 export async function fetchHashpwd(id) {
     try {
-        return  await db('hashpwd')
+        // Query the 'hashpwd' table where the user_id matches the input, return the first result
+        return await db('hashpwd')
             .where('user_id', id)
             .first();
     } catch (error) {
+        // Log any errors encountered during the query
         console.error('fetchHashpwd error: ', error);
         throw error;
     }
 }
 
-export async function fetchAllUsers() {
-    try {
-        return await db("users").select("*");
-    } catch (error) {
-        console.error('fetchAllUsers error: ', error);
-        throw error;
-    }
-}
 
-export async function fetchUserById(userId) {
-    try {
-        return await db("users")
-            .where('id', userId)
-            .first();
-    } catch (error) {
-        console.error('fetchUserById error: ', error);
-        throw error;
-    }
-}
-
-export async function updateUser(userId, user) {
-    try {
-        return  await db("users")
-            .where('id', userId)
-            .update(user)
-            .returning('*');
-    } catch (error) {
-        console.error('updateUser error: ', error);
-        throw error;
-    }
-}
+// export async function fetchAllUsers() {
+//     try {
+//         return await db("users").select("*");
+//     } catch (error) {
+//         console.error('fetchAllUsers error: ', error);
+//         throw error;
+//     }
+// }
+//
+// export async function fetchUserById(userId) {
+//     try {
+//         return await db("users")
+//             .where('id', userId)
+//             .first();
+//     } catch (error) {
+//         console.error('fetchUserById error: ', error);
+//         throw error;
+//     }
+// }
+//
+// export async function updateUser(userId, user) {
+//     try {
+//         return  await db("users")
+//             .where('id', userId)
+//             .update(user)
+//             .returning('*');
+//     } catch (error) {
+//         console.error('updateUser error: ', error);
+//         throw error;
+//     }
+// }

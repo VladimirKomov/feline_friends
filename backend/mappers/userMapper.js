@@ -37,6 +37,7 @@ export function mapUserReqtoUserCredentials(userReq) {
     };
 }
 
+//Mapping the userDB to the response
 export function mapUserDbtoUserRes(userDb, token) {
     return {
         name: userDb.name,
