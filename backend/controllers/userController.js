@@ -20,7 +20,7 @@ export const createUser = async (req, res, next) => {
     try {
         const userReq = req.body;
 
-        console.log('Creating new user: ', userReq);
+        console.log('Creating new user: ', userReq.name, userReq.username);
 
         let user;
         let userCredentials;
@@ -39,9 +39,14 @@ export const createUser = async (req, res, next) => {
         // Removed the plain password
         delete userCredentials.password;
         // Add the user and the hashed password to the database
-        const userDb = await addUserAndHashpwd(user, userCredentials);
+        const result = await addUserAndHashpwd(user, userCredentials);
+        // Checking if an error return error
+        if (result.error) {
+            console.error({error: result.error});
+            return res.status(400).json({ success: false, error: result.error });
+        }
 
-        res.status(201).json({ success: true, data: userDb });
+        res.status(201).json({ success: true, data: result });
     } catch (error) {
         next(error);
     }
@@ -52,6 +57,7 @@ export const getHashpwd = async (req, res, next) => {
     try {
         const userReq = req.body;
         if (!userReq.usernameOrEmail || !userReq.password) {
+            console.error({error: "All fields are required"});
             return res.status(400).json({ success: false, error: "All fields are required" });
         }
         // Search for a userDb by username or email
@@ -59,6 +65,7 @@ export const getHashpwd = async (req, res, next) => {
 
         // If the userDb is not found
         if (!userDb) {
+            console.error({error: "Invalid username or email"});
             return res.status(400).json({ success: false, error: "Invalid username or email" });
         }
         // Search for the hashed userDb password in the hashpwd table

@@ -105,3 +105,30 @@ body {
     font-weight: 400;
     line-height: normal;
 }
+
+.custom-confirm-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.custom-confirm-button:hover {
+    background-color: #218838;
+}
+
+.custom-error-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+.custom-error-button:hover {
+    background-color: #c82333;
+}
