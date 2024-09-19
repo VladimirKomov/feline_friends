@@ -20,7 +20,7 @@ export function mapUserReqToDb(userReq) {
         username: userReq.username,
         email: userReq.email
     };
-};
+}
 
 // Mapping the user request to the user credentials.
 // It returns the username and password (which will be hashed later).
@@ -35,4 +35,13 @@ export function mapUserReqtoUserCredentials(userReq) {
         username: userReq.username,
         password: userReq.password
     };
-};
+}
+
+//Mapping the userDB to the response
+export function mapUserDbtoUserRes(userDb, token) {
+    return {
+        name: userDb.name,
+        username: userDb.username,
+        token
+    };
+}

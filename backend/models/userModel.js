@@ -18,7 +18,7 @@ export async function addUserAndHashpwd(user, hashpwd) {
 
         if (userExists) {
             await trx.rollback(); // Rollback the transaction if the user already exists
-            throw new Error('User with this username or email already exists');
+            return { error: 'User with this username or email already exists' };
         }
 
         // Insert the user into the "users" table and return the new user ID
@@ -46,64 +46,66 @@ export async function addUserAndHashpwd(user, hashpwd) {
         console.error('Error adding user to db: ', error);
         throw error; // Re-throw the error to propagate it further
     }
-};
+}
 
-export async function fetchUserByNameOrEmail(user) {
+// Function to fetch a user by either username or email from the 'users' table
+export async function fetchUserByNameOrEmail(usernameOrEmail) {
     try {
-        const user = await db('users')
-            .where('username', user.usernameOrEmail)
-            .orWhere('email', user.usernameOrEmail)
+        // Query the 'users' table where username or email matches the input, return the first result
+        return await db('users')
+            .where('username', usernameOrEmail)
+            .orWhere('email', usernameOrEmail)
             .first();
-
-        return data;
     } catch (error) {
+        // Log any errors encountered during the query
+        console.error('fetchUserByNameOrEmail error: ', error);
+        throw error;
+    }
+}
+
+// Function to fetch hashed password by user id from the 'hashpwd' table
+export async function fetchHashpwd(id) {
+    try {
+        // Query the 'hashpwd' table where the user_id matches the input, return the first result
+        return await db('hashpwd')
+            .where('user_id', id)
+            .first();
+    } catch (error) {
+        // Log any errors encountered during the query
         console.error('fetchHashpwd error: ', error);
         throw error;
     }
-};
+}
 
-export async function fetchHashpwd(user) {
-    try {
-        const user = await db('users')
-            .where('username', user.usernameOrEmail)
-            .orWhere('email', user.usernameOrEmail)
-            .first();
 
-        return data;
-    } catch (error) {
-        console.error('fetchHashpwd error: ', error);
-        throw error;
-    }
-};
-
-export async function fetchAllUsers() {
-    try {
-        return await db("users").select("*");
-    } catch (error) {
-        console.error('fetchAllUsers error: ', error);
-        throw error;
-    }
-};
-
-export async function fetchUserById(userId) {
-    try {
-        return await db("users")
-            .where('id', userId)
-            .first();
-    } catch (error) {
-        console.error('fetchUserById error: ', error);
-        throw error;
-    }
-};
-
-export async function updateUser(userId, user) {
-    try {
-        return  await db("users")
-            .where('id', userId)
-            .update(user)
-            .returning('*');
-    } catch (error) {
-        console.error('updateUser error: ', error);
-        throw error;
-    }
-};
+// export async function fetchAllUsers() {
+//     try {
+//         return await db("users").select("*");
+//     } catch (error) {
+//         console.error('fetchAllUsers error: ', error);
+//         throw error;
+//     }
+// }
+//
+// export async function fetchUserById(userId) {
+//     try {
+//         return await db("users")
+//             .where('id', userId)
+//             .first();
+//     } catch (error) {
+//         console.error('fetchUserById error: ', error);
+//         throw error;
+//     }
+// }
+//
+// export async function updateUser(userId, user) {
+//     try {
+//         return  await db("users")
+//             .where('id', userId)
+//             .update(user)
+//             .returning('*');
+//     } catch (error) {
+//         console.error('updateUser error: ', error);
+//         throw error;
+//     }
+// }
