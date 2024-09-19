@@ -7,8 +7,9 @@ import {
 } from "../models/userModel.js";
 import * as console from "node:console";
 import bcrypt from 'bcryptjs';
+import {mapUserReqToDb, mapUserReqtoUserCredentials} from "../mappers/userMapper.js";
 
-export const errorHandler = (err, req, res, next) => {
+export const errorHandler = (err, req, res) => {
     console.error(err);
     const statusCode = err.statusCode || 500;
     res.status(statusCode).json({
@@ -19,28 +20,30 @@ export const errorHandler = (err, req, res, next) => {
 
 export const createUser = async (req, res, next) => {
     try {
-        const { email, name, username, password } = req.body;
+        const userReq = req.body;
 
-        console.log('Creating new user: ', email, name, username, password);
-        // all good?
-        if (!email || !name || !username || !password) {
-            return res.status(400).json({ success: false, error: "All fields are required" });
+        console.log('Creating new user: ', userReq);
+
+        let user;
+        let userCredentials;
+        try {
+            // Map the user request to the database format
+            user = mapUserReqToDb(userReq);
+            // Map the user request to the user credentials object for db
+            userCredentials = mapUserReqtoUserCredentials(userReq);
+        } catch (error) {
+            // Return an error response if mapping fails
+            return res.status(400).json({ success: false, error: error.message });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // Added the hash password
+        userCredentials.password_hash = await bcrypt.hash(userCredentials.password, 10);
+        // Removed the plain password
+        delete userCredentials.password;
+        // Add the user and the hashed password to the database
+        const userDb = await addUserAndHashpwd(user, userCredentials);
 
-        const user = {
-            email,
-            username,
-            name
-        };
-        const userCredentials = {
-            username,
-            password_hash: hashedPassword
-        };
-        const userData = await addUserAndHashpwd(user, userCredentials);
-
-        res.status(201).json({ success: true, data: userData });
+        res.status(201).json({ success: true, data: userDb });
     } catch (error) {
         next(error);
     }
