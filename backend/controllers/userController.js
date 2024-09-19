@@ -2,22 +2,22 @@ import {
     addUserAndHashpwd,
     fetchAllUsers,
     fetchHashpwd,
-    fetchUserById,
+    fetchUserById, fetchUserByNameOrEmail,
     updateUser
 } from "../models/userModel.js";
 import * as console from "node:console";
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import {mapUserReqToDb, mapUserReqtoUserCredentials} from "../mappers/userMapper.js";
+import dotenv from "dotenv";
+import * as process from "node:process";
 
-export const errorHandler = (err, req, res) => {
-    console.error(err);
-    const statusCode = err.statusCode || 500;
-    res.status(statusCode).json({
-        success: false,
-        error: err.message || "Server Error",
-    });
-};
+//getting JWT_SECRET and expiresIn
+dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1d'
 
+//Created user
 export const createUser = async (req, res, next) => {
     try {
         const userReq = req.body;
@@ -51,19 +51,41 @@ export const createUser = async (req, res, next) => {
 
 export const getHashpwd = async (req, res, next) => {
     try {
-        const {username, password} = req.body;
-        if (!username || !password) {
+        const userReq = req.body;
+        if (!userReq.usernameOrEmail || !userReq.password) {
             return res.status(400).json({ success: false, error: "All fields are required" });
         }
-        const user = await fetchHashpwd({username});
+        // Search for a user by username or email
+        const user = await fetchUserByNameOrEmail(userReq);
+
+        // If the user is not found
         if (!user) {
-            return res.status(404).json({ success: false, error: "User not found" });
+            return res.status(400).json({ success: false, error: "Invalid username or email" });
         }
-        const isMatch = await bcrypt.compare(password, user.password);
+        // Search for the hashed user password in the hashpwd table
+        const userPassword = await db('hashpwd')
+            .where('user_id', user.id)
+            .first();
+
+        if (!userPassword) {
+            return res.status(400).json({ success: false, error: "Password not found for the user" });
+        }
+
+        // Comparing the entered password with the hashed password
+        const isMatch = await bcrypt.compare(password, userPassword.password_hash);
+
         if (!isMatch) {
-            return res.status(401).json({ success: false, error: "Invalid credentials" });
+            return res.status(400).json({ success: false, error: "Incorrect password" });
         }
-        res.status(200).json({ success: true, data: user.username });
+        // JWT Token Generation
+        const token = jwt.sign({ userId: user.id, username: user.username }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+
+        // Returning a successful response with a token
+        return res.status(200).json({
+            success: true,
+            message: "Login successful",
+            token
+        });
     } catch (error) {
         next(error);
     }

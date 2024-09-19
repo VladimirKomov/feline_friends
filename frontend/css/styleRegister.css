@@ -15,7 +15,7 @@ body {
 }
 
 #container {
-    background-image: url("./img/backgroundReg.svg");
+    background-image: url("../img/backgroundReg.svg");
     background-repeat: no-repeat;
     width: 100vw;
     height: 100vh;
