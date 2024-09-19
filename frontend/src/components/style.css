@@ -1,0 +1,169 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    /*width: 1600px;*/
+    width: 100vw;
+    padding: 15px 200px 15px 200px;
+    flex-direction: column;
+    background: #FFF;
+    gap: 30px;
+}
+
+#header {
+    width: 100%;
+    height: 15vh;
+    /* flex-shrink: 0; */
+    border-radius: 225px;
+    background: #EBE7E6;
+    display: flex;
+    flex-direction: row;
+}
+
+#logo {
+    width: 155px;
+    height: 99px;
+    flex-shrink: 0;
+    padding-left: 40px;
+}
+
+#logoText {
+    width: 155px;
+    height: 84.375px;
+    flex-shrink: 0;
+    color: #3F4E49;
+    font-family: Inter;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+#logoImg {
+    width: 56px;
+    height: 46px;
+    flex-shrink: 0;
+}
+
+#menu {
+    display: flex;
+    align-items: center;
+    gap: 65px;
+    padding-left: 65px;
+}
+
+.menuItem {
+    color: #3F4E49;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+#main {
+    width: 100%;
+    height: 80vh;
+    flex-shrink: 0;
+    border-radius: 100px;
+    background: #EBE7E6;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* justify-content: center; Center content horizontally */
+    gap: 20px;
+    /* Add space between info and cats sections */
+    overflow: hidden;
+}
+
+#info {
+    width: 235px;
+    height: 437px;
+    flex-shrink: 0;
+    padding-left: 40px;
+    flex-direction: column;
+
+}
+
+#infoText {
+    width: 235px;
+    flex-shrink: 0;
+    color: #3F4E49;
+    font-family: Inter;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+#buttonJoinFriends,
+#login {
+    width: 155px;
+    height: 60px;
+    flex-shrink: 0;
+    border-radius: 225px;
+    background: #BAC0B6;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    color: #3F4E49;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+#login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    margin-left: auto;
+    margin-right: 65px;
+
+}
+
+#buttonJoinFriends {
+    margin-top: 20px;
+}
+
+#cats {
+    display: flex;
+    justify-content: end;
+    gap: 20px;
+}
+
+.cat {
+    display: flex;
+    width: 300px;
+    height: 460px;
+    flex-shrink: 0;
+    border-radius: 100px;
+    backdrop-filter: blur(38.5px);
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+/*#cat1 {*/
+/*    background: url(cat1.png) lightgray 50% / cover no-repeat;*/
+/*}*/
+
+/*#cat2 {*/
+/*    background: url(cat2.png) lightgray 50% / cover no-repeat;*/
+/*}*/
+
+/*#cat3 {*/
+/*    background: url(cat3.png) lightgray 50% / cover no-repeat;*/
+/*}*/
+
+#map {
+    width: 70%;
+    height: 80%;
+    flex-shrink: 0;
+    border: 1px solid #3F4E49;
+    margin-left: 40px;
+}
