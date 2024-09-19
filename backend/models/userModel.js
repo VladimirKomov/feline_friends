@@ -18,7 +18,7 @@ export async function addUserAndHashpwd(user, hashpwd) {
 
         if (userExists) {
             await trx.rollback(); // Rollback the transaction if the user already exists
-            throw new Error('User with this username or email already exists');
+            return { error: 'User with this username or email already exists' };
         }
 
         // Insert the user into the "users" table and return the new user ID
