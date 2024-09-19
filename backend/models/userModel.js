@@ -48,28 +48,27 @@ export async function addUserAndHashpwd(user, hashpwd) {
     }
 };
 
-export async function fetchUserByNameOrEmail(user) {
+export async function fetchUserByNameOrEmail(usernameOrEmail) {
     try {
         const user = await db('users')
-            .where('username', user.usernameOrEmail)
-            .orWhere('email', user.usernameOrEmail)
+            .where('username', usernameOrEmail)
+            .orWhere('email', usernameOrEmail)
             .first();
 
-        return data;
+        return user;
     } catch (error) {
         console.error('fetchHashpwd error: ', error);
         throw error;
     }
 };
 
-export async function fetchHashpwd(user) {
+export async function fetchHashpwd(id) {
     try {
-        const user = await db('users')
-            .where('username', user.usernameOrEmail)
-            .orWhere('email', user.usernameOrEmail)
+        const user = await db('hashpwd')
+            .where('user_id', id)
             .first();
 
-        return data;
+        return user;
     } catch (error) {
         console.error('fetchHashpwd error: ', error);
         throw error;

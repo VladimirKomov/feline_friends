@@ -1,4 +1,6 @@
 //Validation email, used reqExp
+import e from "express";
+
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -36,3 +38,11 @@ export function mapUserReqtoUserCredentials(userReq) {
         password: userReq.password
     };
 };
+
+export function mapUserDbtoUserRes(userDb, token) {
+    return {
+        name: userDb.name,
+        username: userDb.username,
+        token
+    };
+}

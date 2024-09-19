@@ -8,7 +8,7 @@ import {
 import * as console from "node:console";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import {mapUserReqToDb, mapUserReqtoUserCredentials} from "../mappers/userMapper.js";
+import {mapUserDbtoUserRes, mapUserReqToDb, mapUserReqtoUserCredentials} from "../mappers/userMapper.js";
 import dotenv from "dotenv";
 import * as process from "node:process";
 
@@ -55,71 +55,68 @@ export const getHashpwd = async (req, res, next) => {
         if (!userReq.usernameOrEmail || !userReq.password) {
             return res.status(400).json({ success: false, error: "All fields are required" });
         }
-        // Search for a user by username or email
-        const user = await fetchUserByNameOrEmail(userReq);
+        // Search for a userDb by username or email
+        const userDb = await fetchUserByNameOrEmail(userReq.usernameOrEmail);
 
-        // If the user is not found
-        if (!user) {
+        // If the userDb is not found
+        if (!userDb) {
             return res.status(400).json({ success: false, error: "Invalid username or email" });
         }
-        // Search for the hashed user password in the hashpwd table
-        const userPassword = await db('hashpwd')
-            .where('user_id', user.id)
-            .first();
+        // Search for the hashed userDb password in the hashpwd table
+        const userPassword = await fetchHashpwd(userDb.id);
 
         if (!userPassword) {
-            return res.status(400).json({ success: false, error: "Password not found for the user" });
+            return res.status(400).json({ success: false, error: "Password not found for the userDb" });
         }
 
         // Comparing the entered password with the hashed password
-        const isMatch = await bcrypt.compare(password, userPassword.password_hash);
+        const isMatch = await bcrypt.compare(userReq.password, userPassword.password_hash);
 
         if (!isMatch) {
             return res.status(400).json({ success: false, error: "Incorrect password" });
         }
         // JWT Token Generation
-        const token = jwt.sign({ userId: user.id, username: user.username }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+        const token = jwt.sign({ userId: userDb.id, username: userDb.username }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
         // Returning a successful response with a token
         return res.status(200).json({
             success: true,
-            message: "Login successful",
-            token
+            data: mapUserDbtoUserRes(userDb, token)
         });
     } catch (error) {
         next(error);
     }
 };
 
-export const getAllUsers = async (req, res, next) => {
-    try {
-        const users = await fetchAllUsers();
-        res.status(200).json({ success: true, data: users });
-    } catch (error) {
-        next(error);
-    }
-};
-
-export const getUser = async (req, res, next) => {
-    try {
-        const userId = req.params.id;
-        const user = await fetchUserById(userId);
-        if (!user) {
-            return res.status(404).json({ success: false, error: "User not found" });
-        }
-        res.status(200).json({ success: true, data: user });
-    } catch (error) {
-        next(error);
-    }
-};
-
-export const changeUser = async (req, res, next) => {
-    try {
-        const userId = req.params.id;
-        const user = req.body;
-        const updatedUser = await updateUser(userId, user);
-        res.status(200).json({ success: true, data: updatedUser });
-    } catch (error) {
-        next(error);
-    }
-}
+// export const getAllUsers = async (req, res, next) => {
+//     try {
+//         const users = await fetchAllUsers();
+//         res.status(200).json({ success: true, data: users });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+//
+// export const getUser = async (req, res, next) => {
+//     try {
+//         const userId = req.params.id;
+//         const user = await fetchUserById(userId);
+//         if (!user) {
+//             return res.status(404).json({ success: false, error: "User not found" });
+//         }
+//         res.status(200).json({ success: true, data: user });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+//
+// export const changeUser = async (req, res, next) => {
+//     try {
+//         const userId = req.params.id;
+//         const user = req.body;
+//         const updatedUser = await updateUser(userId, user);
+//         res.status(200).json({ success: true, data: updatedUser });
+//     } catch (error) {
+//         next(error);
+//     }
+// }
