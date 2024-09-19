@@ -45,14 +45,14 @@ registerForm.addEventListener('submit', async function(event) {
         console.log(result);
 
         if (response.ok) {
-            // Show modal window on successful registration
             Swal.fire({
                 title: 'Success!',
                 text: 'Registration successful!',
                 icon: 'success',
                 confirmButtonText: 'OK',
                 customClass: {
-                    confirmButton: 'custom-confirm-button'
+                    popup: 'custom-success-popup',
+                    confirmButton: 'custom-confirm-button' // Указываем кастомный класс для кнопки
                 }
             }).then(() => {
                 // After closing the modal, redirect to index.html
@@ -61,13 +61,14 @@ registerForm.addEventListener('submit', async function(event) {
             });
         } else {
             // If the server returned an error
-            console.log(result.message)
+            console.log(result.error)
             Swal.fire({
                 title: 'Error!',
                 text: 'Registration failed: ' + result.error,
                 icon: 'error',
                 confirmButtonText: 'OK',
                 customClass: {
+                    popup: 'custom-error-popup',
                     confirmButton: 'custom-error-button'
                 }
             });
