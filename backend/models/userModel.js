@@ -46,34 +46,30 @@ export async function addUserAndHashpwd(user, hashpwd) {
         console.error('Error adding user to db: ', error);
         throw error; // Re-throw the error to propagate it further
     }
-};
+}
 
 export async function fetchUserByNameOrEmail(usernameOrEmail) {
     try {
-        const user = await db('users')
+        return  await db('users')
             .where('username', usernameOrEmail)
             .orWhere('email', usernameOrEmail)
             .first();
-
-        return user;
     } catch (error) {
         console.error('fetchHashpwd error: ', error);
         throw error;
     }
-};
+}
 
 export async function fetchHashpwd(id) {
     try {
-        const user = await db('hashpwd')
+        return  await db('hashpwd')
             .where('user_id', id)
             .first();
-
-        return user;
     } catch (error) {
         console.error('fetchHashpwd error: ', error);
         throw error;
     }
-};
+}
 
 export async function fetchAllUsers() {
     try {
@@ -82,7 +78,7 @@ export async function fetchAllUsers() {
         console.error('fetchAllUsers error: ', error);
         throw error;
     }
-};
+}
 
 export async function fetchUserById(userId) {
     try {
@@ -93,7 +89,7 @@ export async function fetchUserById(userId) {
         console.error('fetchUserById error: ', error);
         throw error;
     }
-};
+}
 
 export async function updateUser(userId, user) {
     try {
@@ -105,4 +101,4 @@ export async function updateUser(userId, user) {
         console.error('updateUser error: ', error);
         throw error;
     }
-};
+}

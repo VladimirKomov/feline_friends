@@ -1,9 +1,7 @@
 import {
     addUserAndHashpwd,
-    fetchAllUsers,
     fetchHashpwd,
-    fetchUserById, fetchUserByNameOrEmail,
-    updateUser
+    fetchUserByNameOrEmail
 } from "../models/userModel.js";
 import * as console from "node:console";
 import bcrypt from 'bcryptjs';
