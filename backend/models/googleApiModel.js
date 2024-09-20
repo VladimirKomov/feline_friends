@@ -3,7 +3,6 @@ import {db} from "../config/db.js";
 
 export async function fetchAllPoints() {
     try {
-        console.log(db("points").select("*"));
         return await db("points").select("*");
     } catch (error) {
         console.error('fetchAllUsers error: ', error);

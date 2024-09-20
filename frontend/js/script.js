@@ -1,17 +1,18 @@
 // Getting elements
-const button = document.getElementById('buttonJoinFriends');
+const joinButton = document.getElementById('buttonJoinFriends');
 const loginButton = document.getElementById('login');
+const logoutButton = document.getElementById('logout');
 const loginForm = document.getElementById('loginForm');
 const closeButton = document.querySelector('.close');
 const errorMessage = document.getElementById('errorMessage');
 const welcomeMessage = document.getElementById('welcomeMessage');
 //we remove it or show it on the form
-const joinButton = document.getElementById('buttonJoinFriends');
+// const joinButton = document.getElementById('buttonJoinFriends');
 const infoTextElement = document.getElementById('infoText');
 
 // Checking if the user is already logged in
 window.addEventListener('load', () => {
-    localStorage.clear();
+    // localStorage.clear();
     const storedUsername = localStorage.getItem('username');
 
     const welcomeMessage = document.getElementById('welcomeMessage');
@@ -26,16 +27,18 @@ window.addEventListener('load', () => {
         loginButton.style.display = 'none'; // Hide the login button
         joinButton.style.display = 'none'; // Hide the join button
         infoTextElement.style.display = 'none'; // Hide the informational text
+        logoutButton.style.display = 'block';
     } else {
         // If the user is not logged in, show the elements
         loginButton.style.display = 'block';
         joinButton.style.display = 'block';
         infoTextElement.style.display = 'block';
+        logoutButton.style.display = 'none';
     }
 });
 
 // Adding an event listener for the click event
-button.addEventListener('click', function() {
+joinButton.addEventListener('click', function() {
     // Redirecting to the registration page
     window.location.href = '/register.html'; // Change to the actual path to the registration page
 });
