@@ -9,5 +9,4 @@ routerGoogleApi.get('/map_points', getAllPoints);
 routerGoogleApi.post('/add_point', addPoint);
 routerGoogleApi.post('/feedings', addFeeding);
 routerGoogleApi.get('/config', GoogleApiKey)
-console.log("+")
 
