@@ -1,19 +1,26 @@
 import {
     addUserAndHashpwd,
     fetchHashpwd,
-    fetchUserByNameOrEmail
+    fetchUserByNameOrEmail, insertToken
 } from "../models/userModel.js";
 import * as console from "node:console";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import {mapUserDbtoUserRes, mapUserReqToDb, mapUserReqtoUserCredentials} from "../mappers/userMapper.js";
+import {
+    mapUserDbtoUserRes,
+    mapUserReqToDb,
+    mapUserReqtoUserCredentials,
+    mapUserTokenToTokenDb
+} from "../mappers/userMapper.js";
 import dotenv from "dotenv";
 import * as process from "node:process";
 
 //getting JWT_SECRET and expiresIn
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1d'
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '15m'
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+const REFRESH_TOKEN_EXPIRES_IN = process.env.REFRESH_TOKEN_EXPIRES_IN || '7d';
 
 //Created user
 export const createUser = async (req, res, next) => {
@@ -45,7 +52,7 @@ export const createUser = async (req, res, next) => {
             console.error({error: result.error});
             return res.status(400).json({ success: false, error: result.error });
         }
-
+        console.log("Successfully created user:", result);
         res.status(201).json({ success: true, data: result });
     } catch (error) {
         next(error);
@@ -81,13 +88,24 @@ export const getHashpwd = async (req, res, next) => {
         if (!isMatch) {
             return res.status(400).json({ success: false, error: "Incorrect password" });
         }
-        // JWT Token Generation
-        const token = jwt.sign({ userId: userDb.id, username: userDb.username }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+        // Generation of access token (short token)
+        const accessToken = jwt.sign(
+            { userId: userDb.id, username: userDb.username },
+            JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+        // Generation of refresh token (long token)
+        const refreshToken = jwt.sign(
+            { userId: userDb.id, username: userDb.username },
+            REFRESH_TOKEN_SECRET,
+            { expiresIn: REFRESH_TOKEN_EXPIRES_IN }
+        );
+        //save token
+        const tokenData = mapUserTokenToTokenDb(userDb.id, refreshToken, REFRESH_TOKEN_EXPIRES_IN);
+        await insertToken(tokenData);
 
         // Returning a successful response with a token
         return res.status(200).json({
             success: true,
-            data: mapUserDbtoUserRes(userDb, token)
+            data: mapUserDbtoUserRes(userDb, accessToken, refreshToken)
         });
     } catch (error) {
         next(error);

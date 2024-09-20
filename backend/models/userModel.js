@@ -1,5 +1,5 @@
 import {db} from '../config/db.js';
-import * as console from "node:console";
+import console from "node:console";
 
 async function checkUserExists(trx, username, email) {
     const existingUser = await trx("users")
@@ -73,6 +73,15 @@ export async function fetchHashpwd(id) {
     } catch (error) {
         // Log any errors encountered during the query
         console.error('fetchHashpwd error: ', error);
+        throw error;
+    }
+}
+
+export async function insertToken(data) {
+    try {
+        await db("refresh_tokens").insert(data)
+    } catch (error) {
+        console.error('insertToken error: ', error);
         throw error;
     }
 }
