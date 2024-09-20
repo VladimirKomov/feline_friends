@@ -6,67 +6,102 @@
 
 body {
     display: flex;
-    /*width: 1600px;*/
-    width: 100%;
-    padding: 15px 200px 15px 200px;
-    flex-direction: column;
-    gap: 30px;
-    align-content: center;
-}
-
-#container {
-    /*background-image: url("../img/backgroundReg.svg");*/
-    background-repeat: no-repeat;
+    justify-content: center;
+    align-items: center;
     width: 100vw;
     height: 100vh;
 }
 
+#container {
+    background-image: url("../img/backgroundReg.jpg");
+    padding: 15px 50px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    max-height: 800px;
+    display: flex;
+    flex-direction: column; /* Вертикальная организация элементов */
+    border-radius: 150px;
+}
+
+#header {
+    text-align: center;
+    /*background-color: lightblue;*/
+    padding: 10px;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between; /* Расположить left и right по бокам */
+    flex-grow: 1;
+    margin-top: 10px;
+}
+
+#left {
+    /*background-color: lightgreen;*/
+    width: 48%; /* Задаем ширину для left */
+    /*padding: 10px;*/
+}
+
+#right {
+    /*background-color: lightcoral;*/
+    width: 48%; /* Задаем ширину для right */
+    padding: 10px;
+}
+
+/*/////////////////////////////*/
+
 #header {
     display: flex;
-    padding: 20px;
-    flex: 0 1 auto;
-    flex-direction: row;
-}
-
-#left, #right {
-    display: flex;
-    flex: 1;
-    padding: 20px;
-    flex-direction: column;
-}
-
-#register {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    align-items: center; /* Выравнивание по вертикали */
+    justify-content: flex-start; /* Расположить элементы слева направо */
+    padding: 10px;
+    /*background-color: lightblue; !* Для примера *!*/
 }
 
 #logo {
+    display: flex;
+    flex-direction: column; /* Разместить элементы внутри вертикально */
+    align-items: center; /* Выровнять по центру горизонтально */
+    /*width: 155px;*/
+    /*flex-shrink: 0;*/
+    /*padding-left: 40px;*/
     width: 155px;
-    height: 99px;
+    /*height: 99px;*/
     flex-shrink: 0;
     padding-left: 40px;
 }
 
+#logoImg {
+        width: 56px;
+        height: 46px;
+        flex-shrink: 0;
+}
+
 #logoText {
+    margin-top: 5px; /* Отступ между изображением и текстом */
     width: 155px;
     height: 84.375px;
     flex-shrink: 0;
     color: #3F4E49;
-    font-family: Inter;
+    font-family: Inter, serif;
     font-size: 24px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
 }
 
-#logoImg {
-    width: 56px;
-    height: 46px;
-    flex-shrink: 0;
+#textHeader {
+    margin-left: 20px; /* Отступ между логотипом и текстом */
+    display: flex;
+    flex-direction: column; /* Чтобы заголовок и текст располагались вертикально */
 }
 
 #join {
+    /*font-size: 18px;*/
+    /*font-weight: bold;*/
     color: #FFF;
     leading-trim: both;
     text-edge: cap;
@@ -99,17 +134,39 @@ body {
     background: #BAC0B6;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     color: #3F4E49;
-    font-family: Inter;
+    font-family: Inter, serif;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
 }
 
-.input{
-    height: 30px;
-    width: 40vw;
+
+#register {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        /*margin-top: 20px;*/
+
 }
+
+
+.input{
+    height: 40px;
+    font-family: Inter, serif;
+    font-size: 20px;
+    width: 80%;
+    max-width: 300px;
+    margin-bottom: 5px;
+    border-radius: 15px;
+    padding-left: 5px;
+}
+
+/*///////////////////////////////////////////*/
+
+
+
+/*///////////////////////////////////*/
 
 .custom-success-popup {
     background-color: #d4edda; /* Светло-зеленый фон */
@@ -124,6 +181,7 @@ body {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+    border-radius: 50px;
 }
 
 .custom-confirm-button:hover {
@@ -134,43 +192,47 @@ body {
     background-color: #f8d7da; /* Светло-красный фон */
     color: #721c24;            /* Темно-красный текст */
     border: 1px solid #f5c6cb; /* Красная рамка */
+    border-radius: 50px;
 }
 
 .custom-error-button {
-    background-color: #dc3545; /* Красный цвет кнопки */
+    background-color: #d1172a; /* Красный цвет кнопки */
     color: white;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+    border-radius: 50px;
 }
 
 .custom-error-button:hover {
-    background-color: #c82333; /* Темно-красный цвет при наведении */
+    background-color: #98242f; /* Темно-красный цвет при наведении */
 }
 
 .custom-confirm-button {
-    background-color: #28a745; /* Зеленый цвет кнопки */
+    background-color: #1db346; /* Зеленый цвет кнопки */
     color: gainsboro;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+    border-radius: 50px;
 }
 
 .custom-confirm-button:hover {
-    background-color: #218838;
+    background-color: #277539;
 }
 
 .custom-error-button {
-    background-color: #dc3545; /* Красный цвет кнопки */
+    background-color: #d1172a; /* Красный цвет кнопки */
     color: gainsboro;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+    border-radius: 50px;
 }
 
 .custom-error-button:hover {
-    background-color: #c82333;
+    background-color: #98242f;
 }

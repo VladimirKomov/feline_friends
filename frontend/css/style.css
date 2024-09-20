@@ -101,7 +101,7 @@ body {
 }
 
 #buttonJoinFriends,
-#login {
+#login, #logout {
     width: 155px;
     height: 60px;
     flex-shrink: 0;
@@ -116,14 +116,27 @@ body {
     line-height: normal;
 }
 
-#login {
+#buttonJoinFriends:hover,
+#login:hover, #logout:hover {
+    transform: scale(1.1);
+}
+
+#logout{
+    background: rgba(184, 117, 117, 0.98);
+    font-weight: bold;
+}
+
+#logout:hover {
+    background: rgba(184, 117, 117, 0.98);
+}
+
+#login, #logout {
     display: flex;
     justify-content: center;
     align-items: center;
     align-self: center;
     margin-left: auto;
     margin-right: 65px;
-
 }
 
 #buttonJoinFriends {
@@ -198,3 +211,91 @@ body {
 #cancelButton, #markerForm button[type="submit"] {
     margin-top: 10px;
 }
+
+/*+++*/
+/* Стили для формы логина */
+#loginForm {
+    display: none; /* По умолчанию скрыта */
+    background-color: #f2f2f2;
+    padding: 10px 20px 20px 20px;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+/*.form-group {*/
+/*    margin-bottom: 15px;*/
+/*}*/
+
+#loginForm h2 {
+    /*margin-top: 0px;*/
+    padding-top: 0px;
+    padding-bottom: 10px;
+}
+
+label {
+    display: block;
+    margin-bottom: 0px;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #1db346;
+    border-radius: 15px;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #277539;
+}
+
+/* Стили для закрытия формы */
+.close {
+    background-color: #d1172a;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    border-radius: 10px;
+    top: 15px;
+    right: 15px;
+}
+
+.close:hover {
+    background-color: #98242f;
+}
+
+/* Стили для сообщения об ошибке */
+#errorMessage {
+    color: red;
+    margin-top: 10px;
+    display: none; /* Скрыто по умолчанию */
+}
+
+#welcomeMessage {
+    display: none; /* Приветствие скрыто по умолчанию */
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+/* Скрываем элементы по умолчанию, они будут показаны через JavaScript */
+#welcomeMessage, #login, #logout #buttonJoinFriends, #infoText {
+    display: none;
+}
+/*===*/
