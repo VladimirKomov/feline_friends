@@ -1,5 +1,3 @@
-// require('dotenv').config();
-// const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
 
 (g => {
     var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document,
@@ -22,7 +20,8 @@
 })({
     key: "AIzaSyAUu1QWJo1RO-amirXAKXbyX_xJRWKWzwE",
     v: "weekly",
-    libraries: "drawing"
+    libraries: "drawing, marker",
+    language: "en" // Add this line to specify the language
     // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
     // Add other bootstrap parameters as needed, using camel case.
 });

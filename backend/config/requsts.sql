@@ -13,3 +13,11 @@ CREATE TABLE hashpwd (
                          FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
+CREATE TABLE points (
+    id SERIAL PRIMARY KEY,        -- Уникальный идентификатор пользователя
+    name VARCHAR(100) NOT NULL,   -- Имя пользователя
+    latitude DECIMAL(9, 6),       -- Широта
+    longitude DECIMAL(9, 6),      -- Долгота
+    number_of_cats INTEGER,       -- Количество кошек в точке
+    created_at TIMESTAMP DEFAULT NOW()  -- Дата и время добавлени
+);
