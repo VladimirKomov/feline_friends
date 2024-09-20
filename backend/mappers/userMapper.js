@@ -38,10 +38,45 @@ export function mapUserReqtoUserCredentials(userReq) {
 }
 
 //Mapping the userDB to the response
-export function mapUserDbtoUserRes(userDb, token) {
+export function mapUserDbtoUserRes(userDb, accessToken, refreshToken) {
     return {
         name: userDb.name,
         username: userDb.username,
-        token
+        accessToken,
+        refreshToken
     };
+}
+
+//Mapping the token to save to db
+export function mapUserTokenToTokenDb(userId, refreshToken, expiresIn) {
+    return {
+        user_id: userId,
+        token: refreshToken,
+        expires_at: getExpirationDate(expiresIn)
+    };
+}
+
+//get expiry date
+function getExpirationDate(expiresIn) {
+    const match = expiresIn.match(/^(\d+)([dhm])$/); // Searching for a number and 'd', 'h', 'm'
+    if (!match) {
+        throw new Error('Invalid format for expiresIn');
+    }
+    const timeValue = parseInt(match[1]); // Numeric value
+    const timeUnit = match[2]; // Time unit ('d', 'h', 'm')
+    let expirationDate;
+    switch (timeUnit) {
+        case 'd':
+            expirationDate = new Date(Date.now() + timeValue * 24 * 60 * 60 * 1000);
+            break;
+        case 'h':
+            expirationDate = new Date(Date.now() + timeValue * 60 * 60 * 1000);
+            break;
+        case 'm':
+            expirationDate = new Date(Date.now() + timeValue * 60 * 1000);
+            break;
+        default:
+            throw new Error('Unsupported time unit in REFRESH_TOKEN_EXPIRES_IN');
+    }
+    return expirationDate;
 }
