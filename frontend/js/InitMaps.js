@@ -1,3 +1,4 @@
+
 let map; // Declare a variable to hold the map instance
 let currentLatLng; // Store the current latitude and longitude of the clicked location
 let selectedPoint; // Store the current point for add the feeding

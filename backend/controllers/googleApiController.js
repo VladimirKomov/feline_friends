@@ -1,7 +1,5 @@
-
 import * as console from "node:console";
 import {fetchAllPoints, createPoint, createFeeding} from "../models/googleApiModel.js";
-import {body} from "express-validator";
 import {getGoogleApiKey} from "../config/googleApi.js";
 
 export const getAllPoints = async (req, res, next) => {
@@ -48,6 +46,7 @@ export const addFeeding = async (req, res, next) => {
 export const GoogleApiKey = async (req, res, next) => {
     try {
         const KEY_GOOGLEAPI = await getGoogleApiKey();
+        // const KEY_GOOGLEAPI = "AIzaSyAUu1QWJo1RO-amirXAKXbyX_xJRWKWzwE";
         console.log(KEY_GOOGLEAPI);
         res.status(200).json({ success: true, data: KEY_GOOGLEAPI });
     } catch (error) {
