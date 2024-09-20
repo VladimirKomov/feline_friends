@@ -1,15 +1,24 @@
-async function getConfig() {
-    const response = await fetch('/api/config');
-    if (!response.ok) { // Check if the response is successful
-        throw new Error('Network response was not ok ' + response.statusText);
-    }
-}
-
-// Использование ключа в клиентском коде
-getConfig().then(apiKey => {
-    console.log('API Key:', apiKey);
-    // Используйте apiKey в своем приложении
-});
+// import { initMap } from './InitMaptest.js'
+// let KEY_GOOGLEAPI = "";
+//
+// async function getConfig() {
+//     try {
+//         const response = await fetch('/api/config');
+//         if (!response.ok) { // Проверяем успешность запроса
+//             throw new Error('Ошибка сети: ' + response.statusText);
+//         }
+//         const res = await response.json();
+//         console.log(res); // Логируем ответ для проверки структуры
+//         KEY_GOOGLEAPI = res.data; // Устанавливаем API ключ
+//         console.log("API Key:", KEY_GOOGLEAPI);
+//
+//         // Инициализация карты после загрузки ключа
+//     } catch (error) {
+//         console.error('Ошибка загрузки API ключа:', error);
+//     }
+// }
+//
+// getConfig().then();
 
 (g => {
     var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document,
@@ -30,10 +39,12 @@ getConfig().then(apiKey => {
         }));
     d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
 })({
-    key: KEY_GOOGLEAPI,
+    key: "AIzaSyAUu1QWJo1RO-amirXAKXbyX_xJRWKWzwE",
     v: "weekly",
     libraries: "drawing, marker",
     language: "en" // Add this line to specify the language
     // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
     // Add other bootstrap parameters as needed, using camel case.
 });
+
+
