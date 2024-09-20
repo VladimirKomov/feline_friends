@@ -1,4 +1,12 @@
 import dotenv from "dotenv";
-// Load environment variables from a .env file
+import * as console from "node:console";
 dotenv.config();
-export const API_KEY = process.env.API_KEY;
+
+export const getGoogleApiKey = async (req, res, next) => {
+    try {
+        const {KEY_GOOGLEAPI} = process.env;
+        return KEY_GOOGLEAPI;
+    } catch (error) {
+        next(error);
+    }
+};
