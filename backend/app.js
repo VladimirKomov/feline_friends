@@ -18,12 +18,13 @@ app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // starting with the index.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'test.html'));
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
 });
 
 
 app.use(express.json());
 app.use('/', routerUser);
+app.use('/api', routerGoogleApi);
 app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
