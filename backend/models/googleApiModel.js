@@ -62,3 +62,20 @@ export async function createPoint(point) {
         throw error; // Re-throw the error to propagate it further
     }
 };
+
+export async function createFeeding(feeding) {
+    try{
+        const [feedingIdObject] = await db("feedings").insert(feeding).returning("id");
+        const feedingId = feedingIdObject.id;
+        const feedingOk = await db('feedings')
+        .join('points', 'feedings.point_id', 'points.id')
+        .select('points.name', 'feedings.feeding_timestamp')
+        .where('feedings.id', feedingId)
+        .first();
+        console.log(feedingOk);
+    return feedingOk
+} catch (error) {
+        console.error('Error adding user to db: ', error);
+        throw error;
+ }
+}

@@ -1,3 +1,15 @@
+async function getConfig() {
+    const response = await fetch('/api/config');
+    if (!response.ok) { // Check if the response is successful
+        throw new Error('Network response was not ok ' + response.statusText);
+    }
+}
+
+// Использование ключа в клиентском коде
+getConfig().then(apiKey => {
+    console.log('API Key:', apiKey);
+    // Используйте apiKey в своем приложении
+});
 
 (g => {
     var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document,
@@ -18,7 +30,7 @@
         }));
     d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
 })({
-    key: "AIzaSyAUu1QWJo1RO-amirXAKXbyX_xJRWKWzwE",
+    key: KEY_GOOGLEAPI,
     v: "weekly",
     libraries: "drawing, marker",
     language: "en" // Add this line to specify the language

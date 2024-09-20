@@ -38,12 +38,20 @@
             <button type="button" id="cancelButton">Cancel</button>
         </form>
     </div>
+    <div id="feedingFormModal" style="display: none;">
+        <form id="feedingForm">
+            <label for="feeding_date">Feeding Date:</label>
+            <input type="date" id="feeding_date" name="feeding_date" required><br>
+            <button type="submit">Save Feeding</button>
+            <button type="button" id="cancelFeedingButton">Cancel</button>
+        </form>
+    </div>
     <!--        <div id = "cat1" class = "cat"></div>-->
     <!--    </div>-->
 
 </div>
-<script src="js/googleMap.js"></script>
-<script src="js/initMaps.js"></script>
+<script type="module" src="js/googleMap.js"></script>
+<script type="module" src="js/initMaps.js"></script>
 </body>
 
 </html>
