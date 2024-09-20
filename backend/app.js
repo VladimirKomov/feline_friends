@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {errorHandler} from "./middleware/commonMiddleware.js";
+import {routerGoogleApi} from "./routes/googleApiRouter.js";
 
 // Defining ways to work with .html
 const __filename = fileURLToPath(import.meta.url);
