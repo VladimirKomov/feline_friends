@@ -168,7 +168,8 @@ body {
     margin-left: 40px;
 }
 
-#markerFormModal {
+#markerFormModal,
+#feedingFormModal {
     display: none; /* Окно скрыто по умолчанию */
     position: fixed;
     z-index: 1000;

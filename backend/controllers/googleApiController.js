@@ -1,6 +1,7 @@
 
 import * as console from "node:console";
-import {fetchAllPoints, createPoint} from "../models/googleApiModel.js";
+import {fetchAllPoints, createPoint, createFeeding} from "../models/googleApiModel.js";
+import {body} from "express-validator";
 
 export const getAllPoints = async (req, res, next) => {
     try {
@@ -26,3 +27,19 @@ export const addPoint = async (req, res, next) => {
     }
 };
 
+export const addFeeding = async (req, res, next) => {
+    try {
+        const feedingReq = req.body;
+        console.log(feedingReq);
+        console.log('Creating new feeding: ', feedingReq);
+        const feeding = await createFeeding(feedingReq);
+        console.log(feeding);
+        if (feeding.error) {
+            console.error({error: feeding.error});
+            return res.status(400).json({ success: false, error: feeding.error });
+        }
+        res.status(200).json({ success: true, data: feeding });
+    } catch (error) {
+        next(error);
+    }
+};

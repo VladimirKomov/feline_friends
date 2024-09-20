@@ -1,5 +1,7 @@
 let map; // Declare a variable to hold the map instance
 let currentLatLng; // Store the current latitude and longitude of the clicked location
+let selectedPoint; // Store the current point for add the feeding
+let userId = 1; // для тестирования, когда будет авторизация - удалить
 
 async function initMap() {
     // The location of Tel Aviv
@@ -51,10 +53,11 @@ async function initMap() {
         // Add a click event listener to the marker
         marker.addListener("click", ({ domEvent, latLng }) => {
             const { target } = domEvent; // Get the target of the event
-
+            selectedPoint = point;
             infoWindow.close(); // Close the info window if it's open
             infoWindow.setContent(marker.title); // Set the content of the info window to the marker's title
             infoWindow.open(marker.map, marker); // Open the info window on the marker
+            document.getElementById('feedingFormModal').style.display = 'block'
         });
     });
 
@@ -78,21 +81,31 @@ async function saveMarker(latLng, name, number_of_cats) {
             number_of_cats // Send the number of cats at the point
         }),
     });
+}
+
+async function addFeeding(point, userId) {
+    const feeding_timestamp = document.getElementById('feeding_date').value;
+    // Send a POST request to save the marker in the database
+    const response = await fetch('/api/feedings', {
+        method: 'POST', // Use POST method
+        headers: {
+            'Content-Type': 'application/json', // Specify JSON content type
+        },
+        body: JSON.stringify({
+            point_id: selectedPoint.id, // Send the point id
+            user_id: userId, // Send the user id
+            feeding_timestamp, // Send the time of feeding
+        }),
+    });
 
     // Check if the request was successful
     if (response.ok) {
-        alert('Marker saved successfully!'); // Alert the user
-        // Optionally add the new marker to the map
-        new google.maps.marker.AdvancedMarkerElement({
-            position: latLng, // Set the position of the new marker
-            map: map, // Associate the marker with the map
-            title: `${name} - ${number_of_cats} cats`, // Set the title
-            gmpClickable: true // Make the marker clickable
-        });
+        alert('Feeding saved successfully!'); // Alert the user
     } else {
-        alert('Failed to save marker! There is already a point within a hundred meters'); // Alert the user in case of failure
+        alert('Failed to save feeding! Try again'); // Alert the user in case of failure
     }
 }
+
 // Handle form submission
 document.getElementById('markerForm').addEventListener('submit', async (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
@@ -112,6 +125,19 @@ document.getElementById('cancelButton').addEventListener('click', () => {
     document.getElementById('markerFormModal').style.display = 'none';
 });
 
+document.getElementById('feedingForm').addEventListener('submit', async (event) => {
+    event.preventDefault(); // Prevent the default form submission behavior
+    await addFeeding(selectedPoint, userId); // Add feeding using the selected point and user ID
+
+    // Hide the form modal after saving
+    document.getElementById('feedingFormModal').style.display = 'none';
+});
+
+// Handle form cancellation for adding feeding
+document.getElementById('cancelFeedingButton').addEventListener('click', () => {
+    // Hide the feeding form modal when the cancel button is clicked
+    document.getElementById('feedingFormModal').style.display = 'none';
+});
 
 // Initialize the map
-initMap(); // Call the initMap function to set up the map
+initMap();// Call the initMap function to set up the map
