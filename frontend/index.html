@@ -20,7 +20,28 @@
         <div id="makeDonation" class="menuItem">Make a donation</div>
     </div>
     <button id="login">Login</button>
+    <button id="logout">Logout</button>
 </header>
+<!-- The login form is processed in js-->
+<div id="loginForm">
+    <button class="close">X</button> <!-- Кнопка закрытия формы -->
+    <h2>Login</h2>
+    <form id="loginFormElement">
+        <div class="form-group">
+            <label for="username">Username or Email</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit">Login</button>
+        <!-- Error message -->
+        <div id="errorMessage">Invalid username or password. Please try again.</div>
+    </form>
+</div>
+
+<div id="welcomeMessage"></div>
 <div id="main">
     <div id=info>
         <div id=infoText>Complete Care for Tel Aviv Strays: From Food to Forever Homes</div>
@@ -52,6 +73,7 @@
 </div>
 <script type="module" src="js/googleMap.js"></script>
 <script type="module" src="js/initMaps.js"></script>
+<script type="module" src="js/script.js"></script>
 </body>
 
 </html>

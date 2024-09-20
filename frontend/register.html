@@ -1,40 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <!-- SweetAlert2 CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-  <!-- SweetAlert2 JS -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="stylesheet" href="css/styleRegister.css">
-  <script src="js/register.js" defer></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="css/styleRegister.css">
+    <script src="js/register.js" defer></script>
 </head>
 <body>
-<div id = "container">
-  <div id = "header">
-    <div id="logo">
-      <img id="logoImg" src="img/LogoImg.svg" alt="Logo">
-      <div id="logoText">Feline Friends TA</div>
+<div id="container">
+    <div id="header">
+        <div id="logo">
+            <img id="logoImg" src="img/LogoImg.svg" alt="Logo">
+            <div id="logoText">Feline Friends TA</div>
+        </div>
+        <div id=textHeader>
+            <div id="join">Join Friends</div>
+            <div id="text">let's make the cats' dream come true</div>
+        </div>
     </div>
-    <div id = textHeader>
-      <div id = "join">Join Friends</div>
-      <div id = "text">let's make the cats' dream come true</div>
+    <div class="content">
+        <div id="left">
+            <form id="register">
+                <input class="input" type="text" id="name" name="name" placeholder="Name" required>
+                <input class="input" type="text" id="username" name="username" placeholder="Username" required>
+                <input class="input" type="email" id="email" name="email" placeholder="Email" required>
+                <input class="input" type="password" id="password" name="password" placeholder="Password" required>
+                <input class="input" type="password" id="confirm_password" name="confirm_password"
+                       placeholder="Confirm Password" required>
+                <span class="input" id="password-error" style="color: red;"></span>
+                <button id="buttonJoinFriends">Join Friends</button>
+            </form>
+        </div>
+        <div id="right">
+        </div>
     </div>
-  </div>
-  <div id = "left">
-    <form id = "register">
-      <input class="input" type="text" id="name" name="name" placeholder="Name" required>
-      <input class="input" type ="text" id="username" name="username" placeholder="Username" required>
-      <input class="input" type="email" id="email" name="email" placeholder="Email" required>
-      <input class="input" type="password" id="password" name="password" placeholder="Password" required>
-      <input class="input" type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
-      <span class="input" id="password-error" style="color: red;"></span>
-      <button id="buttonJoinFriends">Join Friends</button>
-    </form>
-  </div>
-  <div id = "right">
-  </div>
 </div>
 </body>
 </html>

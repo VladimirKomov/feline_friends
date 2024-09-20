@@ -52,12 +52,12 @@ registerForm.addEventListener('submit', async function(event) {
                 confirmButtonText: 'OK',
                 customClass: {
                     popup: 'custom-success-popup',
-                    confirmButton: 'custom-confirm-button' // Указываем кастомный класс для кнопки
+                    confirmButton: 'custom-confirm-button'
                 }
             }).then(() => {
                 // After closing the modal, redirect to index.html
                 //DON'T FORGET TO CHANGE!!!!!!!!!!!!!!
-                window.location.href = '/test.html';
+                window.location.href = '/index.html';
             });
         } else {
             // If the server returned an error
