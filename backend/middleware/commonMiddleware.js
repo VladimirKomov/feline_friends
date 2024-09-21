@@ -16,7 +16,7 @@ export const errorHandler = (err, req, res, next) => {
 };
 
 // Middleware for token verification
-export const checkTokenExists = (req, res, next) => {
+export const tokenHandler = (req, res, next) => {
     const authHeader = req.headers['authorization'];
 
     // Check if the Authorization header was provided

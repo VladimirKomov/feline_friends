@@ -2,7 +2,7 @@ window.addEventListener('load', () => {
     initializeApp();
 });
 
-// Инициализация приложения
+// Initialize the application
 function initializeApp() {
     const joinButton = document.getElementById('buttonJoinFriends');
     const loginButton = document.getElementById('login');
@@ -15,47 +15,47 @@ function initializeApp() {
 
     renderElements(loginButton, joinButton, logoutButton, infoTextElement);
 
-    // Событие для выхода из системы
+    // Logout event handler
     logoutButton?.addEventListener('click', () => {
         localStorage.clear();
         renderElements(loginButton, joinButton, logoutButton, infoTextElement);
     });
 
-    // Событие на кнопку "Присоединиться"
+    // Event for the "Join" button
     joinButton?.addEventListener('click', function() {
-        window.location.href = '/register.html'; // Путь к странице регистрации
+        window.location.href = '/register.html'; // Path to registration page
     });
 
-    // Событие на кнопку "Войти"
+    // Event for the "Login" button
     loginButton?.addEventListener('click', () => {
         loginForm.style.display = 'block';
     });
 
-    // Закрытие формы логина
+    // Close login form
     closeButton?.addEventListener('click', () => {
         loginForm.style.display = 'none';
     });
 
-    // Обработка формы логина
+    // Handle login form submission
     loginFormElement?.addEventListener('submit', async function (event) {
         event.preventDefault();
         await handleLogin(loginForm, errorMessage, infoTextElement, loginButton, joinButton, logoutButton);
     });
 }
 
-// Функция выхода из системы
+// Logout function
 function logout() {
-    // Очистка всех данных пользователя из localStorage
+    // Clear all user data from localStorage
     localStorage.clear();
 
-    // Можно перенаправить пользователя на страницу входа или главную страницу
-    window.location.href = '/login.html'; // или '/index.html'
+    // Redirect the user to the login page or main page
+    window.location.href = '/login.html'; // or '/index.html'
 
-    // Также можно показать сообщение о выходе (необязательно)
+    // Optionally show a logout message
     alert('You have been logged out.');
 }
 
-// Функция для проверки валидности токенов
+// Function to check token validity
 async function checkTokenValidity(accessToken) {
     try {
         const response = await fetch('/users/check_token', {
@@ -64,14 +64,14 @@ async function checkTokenValidity(accessToken) {
                 'Authorization': `Bearer ${accessToken}`
             }
         });
-        return response.ok; // Вернем true, если токен валиден
+        return response.ok; // Return true if the token is valid
     } catch (error) {
         console.error('Error checking token:', error);
-        return false; // Вернем false в случае ошибки
+        return false; // Return false in case of an error
     }
 }
 
-// Функция для обновления accessToken через refreshToken
+// Function to refresh the accessToken using the refreshToken
 export async function refreshAccessToken(refreshToken) {
     try {
         const response = await fetch('/users/refresh_token', {
@@ -85,7 +85,7 @@ export async function refreshAccessToken(refreshToken) {
         const result = await response.json();
 
         if (response.ok) {
-            // Возвращаем новый accessToken
+            // Return the new accessToken
             return result.accessToken;
         } else {
             console.error('Error refreshing token:', result.message);
@@ -97,7 +97,7 @@ export async function refreshAccessToken(refreshToken) {
     }
 }
 
-// Функция для обновления accessToken
+// Function to update the accessToken
 async function updateAccessToken() {
     const refreshToken = localStorage.getItem('refreshToken');
 
@@ -117,7 +117,7 @@ async function updateAccessToken() {
     }
 }
 
-// Функция для проверки авторизации пользователя
+// Function to check user authorization
 async function checkAuthorization() {
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
@@ -126,29 +126,29 @@ async function checkAuthorization() {
         const isTokenValid = await checkTokenValidity(accessToken);
 
         if (isTokenValid) {
-            return true; // Токен действителен
+            return true; // Token is valid
         } else if (refreshToken) {
             const newAccessToken = await refreshAccessToken(refreshToken);
             if (newAccessToken) {
                 localStorage.setItem('accessToken', newAccessToken);
-                return true; // Токен успешно обновлён
+                return true; // Token successfully refreshed
             } else {
                 console.error('Failed to refresh access token');
-                return false; // Ошибка обновления токена
+                return false; // Token refresh failed
             }
         }
     }
     console.error('Authorization failed: no valid token');
-    return false; // Пользователь не авторизован
+    return false; // User is not authorized
 }
 
 export async function checkAndHandleAuthorization() {
     try {
         const isAuthorized = await checkAuthorization();
         if (isAuthorized) {
-            return true; // Пользователь авторизован
+            return true; // User is authorized
         } else {
-            // Пользователь не авторизован
+            // User is not authorized
             return false;
         }
     } catch (error) {
@@ -159,7 +159,7 @@ export async function checkAndHandleAuthorization() {
 }
 
 
-// Функция для отображения элементов интерфейса
+// Function to render UI elements
 async function renderElements(loginButton, joinButton, logoutButton, infoTextElement) {
 
     const isAuthorized = await checkAndHandleAuthorization();
@@ -168,19 +168,19 @@ async function renderElements(loginButton, joinButton, logoutButton, infoTextEle
         const storedUsername = localStorage.getItem('username');
         console.log('Welcome ', storedUsername);
         infoTextElement.innerHTML = `<p>Welcome back, ${storedUsername}!</p>`;
-        loginButton.style.display = 'none'; // Скрываем кнопку логина
-        joinButton.style.display = 'none'; // Скрываем кнопку "Присоединиться"
-        logoutButton.style.display = 'block'; // Показываем кнопку "Выход"
+        loginButton.style.display = 'none'; // Hide the login button
+        joinButton.style.display = 'none'; // Hide the "Join" button
+        logoutButton.style.display = 'block'; // Show the "Logout" button
     } else {
-        // Если пользователь не залогинен
-        loginButton.style.display = 'block'; // Показываем кнопку логина
-        joinButton.style.display = 'block'; // Показываем кнопку "Присоединиться"
+        // If the user is not logged in
+        loginButton.style.display = 'block'; // Show the login button
+        joinButton.style.display = 'block'; // Show the "Join" button
         infoTextElement.innerHTML = '<p>Complete Care for Tel Aviv Strays: From Food to Forever Homes</p>';
-        logoutButton.style.display = 'none'; // Скрываем кнопку "Выход"
+        logoutButton.style.display = 'none'; // Hide the "Logout" button
     }
 }
 
-// Обработчик формы логина
+// Login form handler
 async function handleLogin(loginForm, errorMessage, infoTextElement, loginButton, joinButton, logoutButton) {
     const usernameOrEmail = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -198,17 +198,17 @@ async function handleLogin(loginForm, errorMessage, infoTextElement, loginButton
         console.log('Get response', result);
 
         if (response.ok) {
-            // Сохранение токена и имени пользователя в localStorage
+            // Save the token and username in localStorage
             localStorage.setItem('accessToken', result.data.accessToken);
             localStorage.setItem('refreshToken', result.data.refreshToken);
             localStorage.setItem('username', result.data.username);
 
             console.log('Logged in successfully!');
-            // Закрытие формы логина
+            // Close the login form
             loginForm.style.display = 'none';
             renderElements(loginButton, joinButton, logoutButton, infoTextElement);
         } else {
-            // Показ сообщения об ошибке
+            // Show error message
             errorMessage.style.display = 'block';
             errorMessage.innerHTML = '<p>Invalid username or password.</p><p>Please try again.</p>';
         }
@@ -218,4 +218,3 @@ async function handleLogin(loginForm, errorMessage, infoTextElement, loginButton
         errorMessage.innerHTML = '<p>Something went wrong.</p><p>Please try again.</p>';
     }
 }
-

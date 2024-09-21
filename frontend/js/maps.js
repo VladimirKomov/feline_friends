@@ -129,10 +129,10 @@ async function saveMarker(latLng, name, number_of_cats) {
         });
 
         if (response.status === 401 || response.status === 403) {
-            // Токен истёк, попробуем обновить
+            // The token has expired, let's try to update
             token = await refreshAccessToken();
             if (token) {
-                // Повторный запрос с обновленным токеном
+                // Repeated request with an updated token
                 response = await fetch('/api/add_point', {
                     method: 'POST',
                     headers: {

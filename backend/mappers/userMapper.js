@@ -47,6 +47,15 @@ export function mapUserDbtoUserRes(userDb, accessToken, refreshToken) {
     };
 }
 
+//Mapping the userDB to the response simple
+export function mapUserDebtorUserSimpleRes(userDb) {
+    return {
+        id: userDb.id,
+        name: userDb.name,
+        username: userDb.username,
+    };
+}
+
 //Mapping the token to save to db
 export function mapUserTokenToTokenDb(userId, refreshToken, expiresIn) {
     return {
