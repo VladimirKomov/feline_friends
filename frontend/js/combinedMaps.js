@@ -92,6 +92,7 @@ async function loadGoogleMaps() {
     }
 }
 
+//добавить только для зарегестрированных пользоватлей
 async function saveMarker(latLng, name, number_of_cats) {
     try {
         const response = await fetch('/api/add_point', {
@@ -115,6 +116,7 @@ async function saveMarker(latLng, name, number_of_cats) {
     }
 }
 
+//добавить только для зарегестрированных пользоватлей
 async function addFeeding(point, userId) {
     try {
         const feeding_timestamp = document.getElementById('feeding_date').value;

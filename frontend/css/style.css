@@ -1,4 +1,4 @@
-/* Основное оформление */
+/* Main styling */
 body {
     font-family: Inter, serif;
     color: #3F4E49;
@@ -10,7 +10,7 @@ body {
     padding: 0px;
 }
 
-/* Стили для шапки */
+/* Styles for the header */
 #header {
     display: flex;
     align-items: center;
@@ -18,27 +18,27 @@ body {
     padding: 10px 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 85vw;
-    max-width: 1200px; /* Опционально: ограничение максимальной ширины */
-    margin: 20px 0px 20px 0px; /* Отступ снизу */
+    max-width: 1200px; /* Optional: limit the maximum width */
+    margin: 20px 0px 20px 0px; /* Bottom margin */
     height: 15vh;
     border-radius: 225px;
     background: #EBE7E6;
 }
 
-/* Стили для логотипа */
+/* Styles for the logo */
 #logo {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-right: 20px; /* Отступ справа для логотипа */
-        width: 155px;
-        height: 99px;
-        flex-shrink: 0;
-        padding-left: 20px;
+    margin-right: 20px; /* Right margin for the logo */
+    width: 155px;
+    height: 99px;
+    flex-shrink: 0;
+    padding-left: 20px;
 }
 
 #logoImg {
-    margin-bottom: 5px; /* Отступ ниже изображения логотипа */
+    margin-bottom: 5px; /* Margin below the logo image */
 }
 
 #logoText {
@@ -48,7 +48,7 @@ body {
     text-align: center;
 }
 
-/* Стили для меню */
+/* Styles for the menu */
 #menu {
     display: flex;
     gap: 20px;
@@ -59,7 +59,7 @@ body {
     font-size: 20px;
 }
 
-/* Стили для кнопок */
+/* Styles for the buttons */
 #buttonJoinFriends, #login, #logout {
     width: 155px;
     height: 60px;
@@ -70,33 +70,32 @@ body {
     font-size: 20px;
 }
 
-#buttonJoinFriends:hover,
-#login:hover, #logout:hover {
+#buttonJoinFriends:hover, #login:hover, #logout:hover {
     transform: scale(1.1);
 }
 
-#logout{
+#logout {
     background: rgba(184, 117, 117, 0.98);
 }
 
-/* Общие стили для главного контейнера */
+/* General styles for the main container */
 #main {
     display: flex;
-    flex-wrap: wrap; /* Позволит элементов переноситься на новую строчку при уменьшении */
+    flex-wrap: wrap; /* Allows elements to wrap to a new line when reducing size */
     width: 85vw;
     max-width: 1200px;
-    margin: 20px 0; /* Отступ сверху и снизу */
-    height: 70vh;
+    margin: 20px 0; /* Top and bottom margins */
+    min-height: 70vh;
     border-radius: 100px;
     background: #EBE7E6;
     align-items: center;
-
 }
 
 #info {
     display: flex;
-    flex-direction: column; /* Вертикальное расположение элементов */
-    justify-content: center; /* Центрирование элементов по вертикали */
+    flex-direction: column; /* Vertical alignment of elements */
+    justify-content: center; /* Center elements vertically */
+    min-width: 170px;
     align-items: center;
     flex: 1 1 20%;
     box-sizing: border-box;
@@ -111,7 +110,7 @@ body {
 }
 
 #map {
-    flex: 1 1 70%; /* Базисный размер 70%, flex-grow и flex-shrink равны 1 */
+    flex: 1 1 70%; /* Base size 70%, flex-grow and flex-shrink are set to 1 */
     width: 85%;
     height: 85%;
     border: 1px solid #3F4E49;
@@ -120,19 +119,20 @@ body {
 }
 
 #markerFormModal, #feedingFormModal {
-    display: none; /* Окно скрыто по умолчанию */
+    display: none; /* Window hidden by default */
     position: fixed;
     z-index: 1000;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background-color: white;
+    background-color: #f2f2f2;
     border: 1px solid #888;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 40px;
 }
 
-/* Затемнение фона, когда окно открыто */
+/* Background overlay when modal is open */
 .modal-backdrop {
     display: none;
     position: fixed;
@@ -144,12 +144,12 @@ body {
     z-index: 999;
 }
 
-/* Кнопка отмены и сохранения */
+/* Styles for cancel and save buttons */
 #cancelButton, #markerForm button[type="submit"] {
     margin-top: 10px;
 }
 
-/* Стили для формы логина */
+/* Styles for the login form */
 #loginForm {
     z-index: 1;
     background-color: #f2f2f2;
@@ -160,12 +160,11 @@ body {
     transform: translate(-50%, -50%);
     border: 1px solid #ccc;
     border-radius: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     width: 300px;
 }
 
 #loginForm h2 {
-    /*margin-top: 0px;*/
     padding-top: 0px;
     padding-bottom: 10px;
 }
@@ -175,15 +174,17 @@ label {
     margin-bottom: 0px;
 }
 
-input[type="text"], input[type="password"] {
-    width: 100%;
+input[type="text"], input[type="password"], input[type="number"], input[type="date"] {
+    width: 90%;
+    font-size: 1.1em;
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     border: 1px solid #ccc;
     border-radius: 15px;
 }
 
-button[type="submit"] {
+
+button[type="submit"], button[type="button"]{
     padding: 10px 20px;
     background-color: #1db346;
     border-radius: 15px;
@@ -196,7 +197,12 @@ button[type="submit"]:hover {
     background-color: #277539;
 }
 
-/* Стили для закрытия формы */
+#markerFormModal button[type="button"], #feedingFormModal button[type="button"] {
+    background-color: #d1172a;
+    margin-left: 30px;
+}
+
+/* Styles for closing the form */
 .close {
     background-color: #d1172a;
     color: white;
@@ -209,24 +215,54 @@ button[type="submit"]:hover {
     right: 15px;
 }
 
-.close:hover {
+.close:hover, #markerFormModal button[type="button"]:hover, #feedingFormModal button[type="button"]:hover {
     background-color: #98242f;
 }
 
-/* Стили для сообщения об ошибке */
+/* Styles for the error message */
 #errorMessage {
     color: red;
     margin-top: 10px;
-    display: none; /* Скрыто по умолчанию */
+    display: none; /* Hidden by default */
 }
 
 #welcomeMessage {
-    display: none; /* Приветствие скрыто по умолчанию */
+    display: none; /* Welcome message hidden by default */
     font-size: 20px;
     margin-top: 20px;
 }
 
-/* Скрываем элементы по умолчанию, они будут показаны через JavaScript */
-#loginForm, #welcomeMessage, #login, #logout, #buttonJoinFriends, #infoText {
+/* Hide elements by default, they will be shown via JavaScript */
+#loginForm, #welcomeMessage, #login, #logout, #buttonJoinFriends {
     display: none;
+}
+
+/* Media queries for smaller screens */
+@media (max-width: 768px) {
+    #header {
+        flex-direction: column;
+        height: auto; /* Adjust height */
+        padding: 20px; /* Additional padding */
+    }
+
+    #menu {
+        flex-direction: column;
+        margin-top: 10px;
+        gap: 10px;
+    }
+
+    #buttonJoinFriends, #login, #logout {
+        /*width: 100%;*/
+        margin: 10px 0;
+    }
+
+    #logo {
+        margin-bottom: 20px; /* Bottom margin for the logo */
+        margin-right: 0; /* Remove right margin */
+        padding-left: 0; /* Remove left padding */
+    }
+
+    #logoText {
+        text-align: center; /* Center alignment */
+    }
 }

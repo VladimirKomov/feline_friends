@@ -1,101 +1,102 @@
-// Getting elements
-const joinButton = document.getElementById('buttonJoinFriends');
-const loginButton = document.getElementById('login');
-const logoutButton = document.getElementById('logout');
-const loginForm = document.getElementById('loginForm');
-const closeButton = document.querySelector('.close');
-const errorMessage = document.getElementById('errorMessage');
-const welcomeMessage = document.getElementById('welcomeMessage');
-//we remove it or show it on the form
-// const joinButton = document.getElementById('buttonJoinFriends');
-const infoTextElement = document.getElementById('infoText');
-
-// Checking if the user is already logged in
 window.addEventListener('load', () => {
-    // localStorage.clear();
-    const storedUsername = localStorage.getItem('username');
+    initializeApp();
+});
 
-    const welcomeMessage = document.getElementById('welcomeMessage');
-    const loginButton = document.getElementById('login');
+// Инициализация приложения
+function initializeApp() {
     const joinButton = document.getElementById('buttonJoinFriends');
+    const loginButton = document.getElementById('login');
+    const logoutButton = document.getElementById('logout');
+    const loginForm = document.getElementById('loginForm');
+    const closeButton = document.querySelector('.close');
+    const errorMessage = document.getElementById('errorMessage');
+    const loginFormElement = document.getElementById('loginFormElement');
     const infoTextElement = document.getElementById('infoText');
 
-    if (storedUsername && welcomeMessage && loginButton && joinButton && infoTextElement) {
-        // If the user is logged in, display the welcome message
-        welcomeMessage.style.display = 'block'; // Show the welcome message
-        welcomeMessage.innerHTML = `<p>Welcome back, ${storedUsername}!</p>`;
-        loginButton.style.display = 'none'; // Hide the login button
-        joinButton.style.display = 'none'; // Hide the join button
-        infoTextElement.style.display = 'none'; // Hide the informational text
-        logoutButton.style.display = 'block';
+    renderElements(loginButton, joinButton, logoutButton, infoTextElement);
+
+    // Событие для выхода из системы
+    logoutButton?.addEventListener('click', () => {
+        localStorage.clear();
+        renderElements(loginButton, joinButton, logoutButton, infoTextElement);
+    });
+
+    // Событие на кнопку "Присоединиться"
+    joinButton?.addEventListener('click', function() {
+        window.location.href = '/register.html'; // Путь к странице регистрации
+    });
+
+    // Событие на кнопку "Войти"
+    loginButton?.addEventListener('click', () => {
+        loginForm.style.display = 'block';
+    });
+
+    // Закрытие формы логина
+    closeButton?.addEventListener('click', () => {
+        loginForm.style.display = 'none';
+    });
+
+    // Обработка формы логина
+    loginFormElement?.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        await handleLogin(loginForm, errorMessage, infoTextElement, loginButton, joinButton, logoutButton);
+    });
+}
+
+// Функция для отображения элементов интерфейса
+function renderElements(loginButton, joinButton, logoutButton, infoTextElement) {
+    const storedUsername = localStorage.getItem('username');
+    console.log('Welcome ', storedUsername);
+
+    if (storedUsername) {
+        infoTextElement.innerHTML = `<p>Welcome back, ${storedUsername}!</p>`;
+        loginButton.style.display = 'none'; // Скрываем кнопку логина
+        joinButton.style.display = 'none'; // Скрываем кнопку "Присоединиться"
+        logoutButton.style.display = 'block'; // Показываем кнопку "Выход"
     } else {
-        // If the user is not logged in, show the elements
-        loginButton.style.display = 'block';
-        joinButton.style.display = 'block';
-        infoTextElement.style.display = 'block';
-        logoutButton.style.display = 'none';
+        // Если пользователь не залогинен
+        loginButton.style.display = 'block'; // Показываем кнопку логина
+        joinButton.style.display = 'block'; // Показываем кнопку "Присоединиться"
+        infoTextElement.innerHTML = '<p>Complete Care for Tel Aviv Strays: From Food to Forever Homes</p>';
+        logoutButton.style.display = 'none'; // Скрываем кнопку "Выход"
     }
-});
+}
 
-// Adding an event listener for the click event
-joinButton.addEventListener('click', function() {
-    // Redirecting to the registration page
-    window.location.href = '/register.html'; // Change to the actual path to the registration page
-});
-
-// Displaying the login form when the "Login" button is clicked
-loginButton.addEventListener('click', () => {
-    loginForm.style.display = 'block';
-});
-
-// Closing the login form when the "X" button is clicked
-closeButton.addEventListener('click', () => {
-    loginForm.style.display = 'none';
-});
-
-// Handling form submission
-const loginFormElement = document.getElementById('loginFormElement');
-loginFormElement.addEventListener('submit', async function (event) {
-    event.preventDefault(); // Preventing the default form behavior
-
-    // Getting field values
+// Обработчик формы логина
+async function handleLogin(loginForm, errorMessage, infoTextElement, loginButton, joinButton, logoutButton) {
     const usernameOrEmail = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
     try {
-        // Send request to the server
         const response = await fetch('/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({usernameOrEmail, password})
+            body: JSON.stringify({ usernameOrEmail, password })
         });
 
         const result = await response.json();
         console.log('Get response', result);
+
         if (response.ok) {
-            // Saving the token and username in localStorage
+            // Сохранение токена и имени пользователя в localStorage
             localStorage.setItem('accessToken', result.data.accessToken);
             localStorage.setItem('refreshToken', result.data.refreshToken);
             localStorage.setItem('username', result.data.username);
+
             console.log('Logged in successfully!');
-            // Closing the login form
+            // Закрытие формы логина
             loginForm.style.display = 'none';
-            // Showing a welcome message on the main page
-            welcomeMessage.style.display = 'block';
-            welcomeMessage.innerHTML = `<p>Welcome, ${result.data.username}!</p>`;
+            renderElements(loginButton, joinButton, logoutButton, infoTextElement);
         } else {
-            // Showing an error message
-            console.log('Unable to log in.', result.error);
+            // Показ сообщения об ошибке
             errorMessage.style.display = 'block';
             errorMessage.innerHTML = '<p>Invalid username or password.</p><p>Please try again.</p>';
         }
     } catch (error) {
-        console.error(error);
+        console.error('Error during login:', error);
         errorMessage.style.display = 'block';
         errorMessage.innerHTML = '<p>Something went wrong.</p><p>Please try again.</p>';
     }
-});
-
-
+}
