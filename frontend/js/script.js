@@ -72,7 +72,7 @@ async function checkTokenValidity(accessToken) {
 }
 
 // Функция для обновления accessToken через refreshToken
-async function refreshAccessToken(refreshToken) {
+export async function refreshAccessToken(refreshToken) {
     try {
         const response = await fetch('/users/refresh_token', {
             method: 'POST',
@@ -89,11 +89,11 @@ async function refreshAccessToken(refreshToken) {
             return result.accessToken;
         } else {
             console.error('Error refreshing token:', result.message);
-            return null; // Вернем null в случае ошибки
+            return null;
         }
     } catch (error) {
         console.error('Error during refresh token:', error);
-        return null; // Вернем null в случае ошибки
+        return null;
     }
 }
 
@@ -160,11 +160,13 @@ export async function checkAndHandleAuthorization() {
 
 
 // Функция для отображения элементов интерфейса
-function renderElements(loginButton, joinButton, logoutButton, infoTextElement) {
-    const storedUsername = localStorage.getItem('username');
-    console.log('Welcome ', storedUsername);
+async function renderElements(loginButton, joinButton, logoutButton, infoTextElement) {
 
-    if (storedUsername) {
+    const isAuthorized = await checkAndHandleAuthorization();
+
+    if (isAuthorized) {
+        const storedUsername = localStorage.getItem('username');
+        console.log('Welcome ', storedUsername);
         infoTextElement.innerHTML = `<p>Welcome back, ${storedUsername}!</p>`;
         loginButton.style.display = 'none'; // Скрываем кнопку логина
         joinButton.style.display = 'none'; // Скрываем кнопку "Присоединиться"

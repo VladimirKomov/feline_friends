@@ -169,36 +169,3 @@ export const refreshToken = async (req, res, next) => {
     });
 
 }
-
-// export const getAllUsers = async (req, res, next) => {
-//     try {
-//         const users = await fetchAllUsers();
-//         res.status(200).json({ success: true, data: users });
-//     } catch (error) {
-//         next(error);
-//     }
-// };
-//
-// export const getUser = async (req, res, next) => {
-//     try {
-//         const userId = req.params.id;
-//         const user = await fetchUserById(userId);
-//         if (!user) {
-//             return res.status(404).json({ success: false, error: "User not found" });
-//         }
-//         res.status(200).json({ success: true, data: user });
-//     } catch (error) {
-//         next(error);
-//     }
-// };
-//
-// export const changeUser = async (req, res, next) => {
-//     try {
-//         const userId = req.params.id;
-//         const user = req.body;
-//         const updatedUser = await updateUser(userId, user);
-//         res.status(200).json({ success: true, data: updatedUser });
-//     } catch (error) {
-//         next(error);
-//     }
-// }

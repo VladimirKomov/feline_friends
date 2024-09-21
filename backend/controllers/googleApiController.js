@@ -15,6 +15,8 @@ export const addPoint = async (req, res, next) => {
     try {
         const pointReq = req.body;
         console.log('Creating new point: ', pointReq);
+        const user = req.user;
+        console.log('addPoint-access is allowed', user);
         const point = await createPoint(pointReq);
         if (point.error) {
             console.error({error: point.error});
@@ -29,10 +31,11 @@ export const addPoint = async (req, res, next) => {
 export const addFeeding = async (req, res, next) => {
     try {
         const feedingReq = req.body;
-        console.log(feedingReq);
-        console.log('Creating new feeding: ', feedingReq);
+        const user = req.user;
+        console.log('addFeeding-access is allowed', user);
+        feedingReq.user_id = user.userId;
+        console.log('Save-addFeeding: ', feedingReq);
         const feeding = await createFeeding(feedingReq);
-        console.log(feeding);
         if (feeding.error) {
             console.error({error: feeding.error});
             return res.status(400).json({ success: false, error: feeding.error });

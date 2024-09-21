@@ -1,4 +1,4 @@
-import { checkAndHandleAuthorization } from './script.js';
+import {checkAndHandleAuthorization, refreshAccessToken} from './script.js';
 
 
 async function getApiKey() {
@@ -15,10 +15,9 @@ async function getApiKey() {
 let map;
 let currentLatLng;
 let selectedPoint;
-let userId = 1; // для тестирования, удалить при авторизации
 
 async function initMap() {
-    const position = { lat: 32.0853, lng: 34.7818 };
+    const position = {lat: 32.0853, lng: 34.7818};
 
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 13,
@@ -46,7 +45,7 @@ async function initMap() {
                 }
 
                 const marker = new google.maps.marker.AdvancedMarkerElement({
-                    position: { lat: latitude, lng: longitude },
+                    position: {lat: latitude, lng: longitude},
                     map: map,
                     title: `${point.id}. ${point.name} number of cats at a point ${point.number_of_cats}`,
                     gmpClickable: true
@@ -106,17 +105,20 @@ async function loadGoogleMaps() {
     }
 }
 
-//добавить только для зарегестрированных пользоватлей
+//add only for registered users
 async function saveMarker(latLng, name, number_of_cats) {
 
-    const isAuthorized = await checkAndHandleAuthorization(); // Проверяем авторизацию
-    if (!isAuthorized) return; // Если не авторизован, выходим из функции
+    const isAuthorized = await checkAndHandleAuthorization();
+    if (!isAuthorized) return;
+
+    let token = localStorage.getItem('accessToken');
 
     try {
-        const response = await fetch('/api/add_point', {
+        let response = await fetch('/api/add_point', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Adding a token
             },
             body: JSON.stringify({
                 latitude: latLng.lat(),
@@ -126,33 +128,97 @@ async function saveMarker(latLng, name, number_of_cats) {
             }),
         });
 
+        if (response.status === 401 || response.status === 403) {
+            // Токен истёк, попробуем обновить
+            token = await refreshAccessToken();
+            if (token) {
+                // Повторный запрос с обновленным токеном
+                response = await fetch('/api/add_point', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        latitude,
+                        longitude,
+                        name,
+                        number_of_cats
+                    })
+                });
+            } else {
+                alert('Something went wrong!');
+                console.error('Failed to refresh token, logging out');
+                return;
+            }
+        }
+
         if (!response.ok) {
             throw new Error('Failed to save marker');
         }
+        const newMarker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            title: `${name} number of cats at a point ${number_of_cats}`,
+            gmpClickable: true
+        });
+        const infoWindow = new google.maps.InfoWindow();
+
+        // newMarker.addListener("click", () => {
+        //     selectedPoint = point;
+        //     infoWindow.close();
+        //     infoWindow.setContent(marker.title);
+        //     infoWindow.open(map, marker);
+        // });
     } catch (error) {
         console.error('Error saving marker:', error);
     }
 }
 
-//добавить только для зарегестрированных пользоватлей
-async function addFeeding(point, userId) {
+//add only for registered users
+async function addFeeding(point) {
 
-    const isAuthorized = await checkAndHandleAuthorization(); // Проверяем авторизацию
-    if (!isAuthorized) return; // Если не авторизован, выходим из функции
+    const isAuthorized = await checkAndHandleAuthorization();
+    if (!isAuthorized) return;
+
+    let token = localStorage.getItem('accessToken');
 
     try {
         const feeding_timestamp = document.getElementById('feeding_date').value;
-        const response = await fetch('/api/feedings', {
+        let response = await fetch('/api/feedings', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Adding a token
             },
             body: JSON.stringify({
                 point_id: selectedPoint.id,
-                user_id: userId,
                 feeding_timestamp,
-            }),
+            })
         });
+
+        if (response.status === 401 || response.status === 403) {
+            // Токен истёк, попробуем обновить
+            token = await refreshAccessToken();
+            if (token) {
+                // Повторный запрос с обновленным токеном
+                response = await fetch('/api/add_point', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        point_id: selectedPoint.id,
+                        feeding_timestamp
+                    })
+                });
+            } else {
+                alert('Something went wrong');
+                console.error('Failed to refresh token, logging out');
+                return;
+            }
+        }
 
         if (response.ok) {
             alert('Feeding saved successfully!');
@@ -183,7 +249,7 @@ document.getElementById('cancelButtonWarningModal').addEventListener('click', ()
 
 document.getElementById('feedingForm').addEventListener('submit', async (event) => {
     event.preventDefault();
-    await addFeeding(selectedPoint, userId);
+    await addFeeding(selectedPoint);
     document.getElementById('feedingFormModal').style.display = 'none';
 });
 

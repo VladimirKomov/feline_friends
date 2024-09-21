@@ -1,6 +1,7 @@
 import console from "node:console";
 import dotenv from "dotenv";
 import process from "node:process";
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -14,30 +15,29 @@ export const errorHandler = (err, req, res, next) => {
     });
 };
 
-// Middleware для проверки токена
+// Middleware for token verification
 export const checkTokenExists = (req, res, next) => {
     const authHeader = req.headers['authorization'];
 
-    // Проверяем, был ли передан заголовок Authorization
+    // Check if the Authorization header was provided
     if (!authHeader) {
         return res.status(401).json({ success: false, message: 'Authorization header is missing' });
     }
 
-    const token = authHeader.split(' ')[1]; // Извлекаем сам токен из заголовка
+    const token = authHeader.split(' ')[1]; // Extract the token from the header
 
-    // Проверяем, был ли передан токен
+    // Check if the token was provided
     if (!token) {
         return res.status(401).json({ success: false, message: 'Token is missing' });
     }
 
-    // Проверяем валидность токена
+    // Verify the validity of the token
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) {
             return res.status(403).json({ success: false, message: 'Token is invalid or expired' });
         }
 
-        // Если токен валиден, сохраняем информацию о пользователе в req.user
         req.user = user;
-        next(); // Передаем управление следующему middleware или маршруту
+        next();
     });
 };
