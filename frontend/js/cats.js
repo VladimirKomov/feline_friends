@@ -20,16 +20,15 @@ async function displayCats(cats) {
         return;
     }
 
-    container.innerHTML = ''; // Очищаем контейнер перед добавлением
-    console.log(cats);
+    container.innerHTML = ''; // Clear the container before adding
     cats.forEach(cat => {
-        console.log("-");
         const card = document.createElement('div');
         card.classList.add('card');
 
         const img = document.createElement('img');
+
         img.src = cat.image_url;
-        img.alt = `Кот #${cat.id}`;
+        img.alt = `Cat ${cat.id}`;
         card.appendChild(img);
 
         const cardBody = document.createElement('div');
@@ -37,15 +36,15 @@ async function displayCats(cats) {
 
         const cardTitle = document.createElement('h5');
         cardTitle.classList.add('card-title');
-        cardTitle.innerText = `Кот #${cat.id}`;
+        cardTitle.innerText = `Cat ${cat.id}`;
 
         const cardText = document.createElement('p');
         cardText.classList.add('card-text');
-        cardText.innerText = cat.description || 'Без описания';
+        cardText.innerText = cat.description || 'Without description';
 
         const healthInfo = document.createElement('p');
         healthInfo.classList.add('card-text');
-        healthInfo.innerText = `Проблемы со здоровьем: ${cat.health_issues || 'Нет'}`;
+        healthInfo.innerText = `Health issues: ${cat.health_issues || 'No'}`;
 
         cardBody.appendChild(cardTitle);
         cardBody.appendChild(cardText);
@@ -53,6 +52,8 @@ async function displayCats(cats) {
 
         card.appendChild(cardBody);
         container.appendChild(card);
+
+
     });
 }
 

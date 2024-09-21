@@ -1,9 +1,7 @@
 import multer from 'multer'
 
-// Используем хранилище в памяти
+// Use in-memory storage
 const storage = multer.memoryStorage();
 
-// Создаем объект multer с конфигурацией
-export const upload = multer({ storage: storage });
-
-
+// Create a multer object with configuration
+export const upload = multer({storage: storage});

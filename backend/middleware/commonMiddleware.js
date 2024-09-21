@@ -21,14 +21,14 @@ export const tokenHandler = (req, res, next) => {
 
     // Check if the Authorization header was provided
     if (!authHeader) {
-        return res.status(401).json({ success: false, message: 'Authorization header is missing' });
+        return res.status(401).json({success: false, message: 'Authorization header is missing'});
     }
 
     const token = authHeader.split(' ')[1]; // Extract the token from the header
 
     // Check if the token was provided
     if (!token) {
-        return res.status(401).json({ success: false, message: 'Token is missing' });
+        return res.status(401).json({success: false, message: 'Token is missing'});
     }
 
     // Verify the validity of the token

@@ -35,7 +35,7 @@ export async function createPoint(point) {
             return {error: "There is already a point within a hundred meters"};
         }
 
-            // Insert the user into the "users" table and return the new user ID
+        // Insert the user into the "users" table and return the new user ID
         const [pointId] = await trx("points").insert(point).returning("id");
         console.log('added point =', pointId);
 
@@ -63,17 +63,17 @@ export async function createPoint(point) {
 };
 
 export async function createFeeding(feeding) {
-    try{
+    try {
         const [feedingIdObject] = await db("feedings").insert(feeding).returning("id");
         const feedingId = feedingIdObject.id;
         const feedingOk = await db('feedings')
-        .join('points', 'feedings.point_id', 'points.id')
-        .select('points.name', 'feedings.feeding_timestamp')
-        .where('feedings.id', feedingId)
-        .first();
-    return feedingOk;
-} catch (error) {
+            .join('points', 'feedings.point_id', 'points.id')
+            .select('points.name', 'feedings.feeding_timestamp')
+            .where('feedings.id', feedingId)
+            .first();
+        return feedingOk;
+    } catch (error) {
         console.error('Error adding feeding to db: ', error);
         throw error;
- }
+    }
 }
