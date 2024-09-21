@@ -183,11 +183,6 @@ addCat.addEventListener('click',  async function() {
     document.getElementById('addCat').style.display = 'none';
 });
 
-addCat.addEventListener('click',  async function() {
-    document.getElementById('cropImage').style.display = 'block';
-    document.getElementById('data').style.display = 'block';
-    document.getElementById('addCat').style.display = 'none';
-});
 
 addCatBD.addEventListener('click', async function(event) {
     event.preventDefault();
@@ -222,6 +217,14 @@ addCatBD.addEventListener('click', async function(event) {
         } else {
             // If the server returned an error
         }
+        document.getElementById('description').value = '';
+        document.getElementById('healthIssues').value = '';
+        document.getElementById('url').value = '';
+
+        document.getElementById('cropImage').style.display = 'none';
+        document.getElementById('data').style.display = 'none';
+        document.getElementById('addCat').style.display = 'block';
+
     } catch (error) {
         console.error('Error during added cat:', error);
     }
