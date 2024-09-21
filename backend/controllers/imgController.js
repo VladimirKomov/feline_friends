@@ -1,28 +1,30 @@
 import sharp from 'sharp';
 import fs from 'fs';
-import pkg from 'aws-sdk';
 import {uploadToS3, createCat, allCats} from "../models/imgModel.js";
 import console from "node:console";
-import {createPoint} from "../models/googleApiModel.js";
 
+// Handler to upload and process an image
 export const uploadImage = async (req, res) => {
     try {
-        const file = req.file; // Файл, загруженный через multer
+        const file = req.file; // File uploaded via multer
 
         if (!file) {
             return res.status(400).json({error: 'No file uploaded'});
         }
 
-        // Применяем обработку изображения
+        // Process the image (resize to 300x300)
         const processedImage = await sharp(file.buffer).resize({width: 300, height: 300}).toBuffer();
-        fs.writeFile('processed-image.jpg', processedImage, (err) => {
-            if (err) {
-                console.error('Error saving image:', err);
-            } else {
-                console.log('Image cropped successfully!');
-            }
-        });
 
+        // Save the processed image to the filesystem for test
+        // fs.writeFile('processed-image.jpg', processedImage, (err) => {
+        //     if (err) {
+        //         console.error('Error saving image:', err);
+        //     } else {
+        //         console.log('Image cropped successfully!');
+        //     }
+        // });
+
+        // Upload the processed image to S3
         const urlImg = await uploadToS3(processedImage, file.originalname, file.type);
         if (urlImg.error) {
             console.error({error: urlImg.error});
@@ -36,6 +38,7 @@ export const uploadImage = async (req, res) => {
     }
 };
 
+// Handler to add a cat to the database
 export const addCatDB = async (req, res) => {
     try {
         const catReq = req.body;
@@ -51,9 +54,10 @@ export const addCatDB = async (req, res) => {
     }
 }
 
-export const getAllCats = async (req, res,next) => {
+// Handler to get all cats from the database
+export const getAllCats = async (req, res, next) => {
     try {
-        console.log('Getting all cat');
+        console.log('Getting all cats');
         const allCatsList = await allCats();
         if (allCatsList.error) {
             console.error({error: allCatsList.error});
