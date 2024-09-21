@@ -46,16 +46,13 @@
         <div id=infoText>Complete Care for Tel Aviv Strays: From Food to Forever Homes</div>
         <button id="buttonJoinFriends">Join Friends</button>
     </div>
-    <!--    <div id = cats>-->
     <div id = "map" class = "map"></div>
     <div id="markerFormModal" style="display: none;">
         <form id="markerForm">
-<!--            <label for="name">Name:</label>-->
             <input type="text" id="name" name="name" required placeholder="point's name"><br>
-<!--            <label for="number_of_cats">Number of Cats:</label>-->
             <input type="number" id="number_of_cats" name="number_of_cats" required placeholder="number of Cats"><br>
             <button type="submit">Save Marker</button>
-            <button type="button" id="cancelButton">Cancel</button>
+            <button type="button" class="cancelButton" id="cancelButton">Cancel</button>
         </form>
     </div>
     <div id="feedingFormModal" style="display: none;">
@@ -66,14 +63,19 @@
             <button type="button" id="cancelFeedingButton">Cancel</button>
         </form>
     </div>
-    <!--        <div id = "cat1" class = "cat"></div>-->
-    <!--    </div>-->
+    <!-- Modal window with warning -->
+    <div id="loginWarningModal" style="display: none;">
+        <form id="warningForm">
+            <h2>Registration Required</h2>
+            <p>You must be logged in to change points on the map.</p>
+            <p>Please log in or <a href="/register.html">register</a> to continue.</p>
+            <button type="button" class="cancelButton" id="cancelButtonWarningModal">Cancel</button>
+        </form>
+    </div>
 
 </div>
-<!--<script src="js/googleMap.js"></script>-->
-<!--<script src="js/initMaps.js"></script>-->
-<script src="js/combinedMaps.js"></script>
-<script type="module" src="js/script.js"></script>
+<script type="module" src="/js/script.js"></script>
+<script type="module" src="/js/combinedMaps.js"></script>
 </body>
 
 </html>

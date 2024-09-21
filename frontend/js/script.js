@@ -43,6 +43,122 @@ function initializeApp() {
     });
 }
 
+// Функция выхода из системы
+function logout() {
+    // Очистка всех данных пользователя из localStorage
+    localStorage.clear();
+
+    // Можно перенаправить пользователя на страницу входа или главную страницу
+    window.location.href = '/login.html'; // или '/index.html'
+
+    // Также можно показать сообщение о выходе (необязательно)
+    alert('You have been logged out.');
+}
+
+// Функция для проверки валидности токенов
+async function checkTokenValidity(accessToken) {
+    try {
+        const response = await fetch('/users/check_token', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        return response.ok; // Вернем true, если токен валиден
+    } catch (error) {
+        console.error('Error checking token:', error);
+        return false; // Вернем false в случае ошибки
+    }
+}
+
+// Функция для обновления accessToken через refreshToken
+async function refreshAccessToken(refreshToken) {
+    try {
+        const response = await fetch('/users/refresh_token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ refreshToken })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // Возвращаем новый accessToken
+            return result.accessToken;
+        } else {
+            console.error('Error refreshing token:', result.message);
+            return null; // Вернем null в случае ошибки
+        }
+    } catch (error) {
+        console.error('Error during refresh token:', error);
+        return null; // Вернем null в случае ошибки
+    }
+}
+
+// Функция для обновления accessToken
+async function updateAccessToken() {
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    if (refreshToken) {
+        const newAccessToken = await refreshAccessToken(refreshToken);
+
+        if (newAccessToken) {
+            localStorage.setItem('accessToken', newAccessToken);
+            console.log('Access token updated successfully');
+        } else {
+            console.error('Failed to refresh access token');
+            logout();
+        }
+    } else {
+        console.error('No refresh token found');
+        logout();
+    }
+}
+
+// Функция для проверки авторизации пользователя
+async function checkAuthorization() {
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    if (accessToken) {
+        const isTokenValid = await checkTokenValidity(accessToken);
+
+        if (isTokenValid) {
+            return true; // Токен действителен
+        } else if (refreshToken) {
+            const newAccessToken = await refreshAccessToken(refreshToken);
+            if (newAccessToken) {
+                localStorage.setItem('accessToken', newAccessToken);
+                return true; // Токен успешно обновлён
+            } else {
+                console.error('Failed to refresh access token');
+                return false; // Ошибка обновления токена
+            }
+        }
+    }
+    console.error('Authorization failed: no valid token');
+    return false; // Пользователь не авторизован
+}
+
+export async function checkAndHandleAuthorization() {
+    try {
+        const isAuthorized = await checkAuthorization();
+        if (isAuthorized) {
+            return true; // Пользователь авторизован
+        } else {
+            // Пользователь не авторизован
+            return false;
+        }
+    } catch (error) {
+        console.error('Error during authorization check:', error);
+        alert('An error occurred while checking authorization. Please try again.');
+        return false;
+    }
+}
+
+
 // Функция для отображения элементов интерфейса
 function renderElements(loginButton, joinButton, logoutButton, infoTextElement) {
     const storedUsername = localStorage.getItem('username');
@@ -100,3 +216,4 @@ async function handleLogin(loginForm, errorMessage, infoTextElement, loginButton
         errorMessage.innerHTML = '<p>Something went wrong.</p><p>Please try again.</p>';
     }
 }
+

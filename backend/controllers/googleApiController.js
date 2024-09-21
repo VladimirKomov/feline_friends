@@ -43,7 +43,7 @@ export const addFeeding = async (req, res, next) => {
     }
 };
 
-export const GoogleApiKey = async (req, res, next) => {
+export const googleApiKey = async (req, res, next) => {
     try {
         const KEY_GOOGLEAPI = await getGoogleApiKey();
         res.status(200).json({ success: true, data: KEY_GOOGLEAPI });

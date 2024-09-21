@@ -1,3 +1,6 @@
+import { checkAndHandleAuthorization } from './script.js';
+
+
 async function getApiKey() {
     try {
         const response = await fetch('/api/config');
@@ -14,7 +17,7 @@ let currentLatLng;
 let selectedPoint;
 let userId = 1; // для тестирования, удалить при авторизации
 
-function initMap() {
+async function initMap() {
     const position = { lat: 32.0853, lng: 34.7818 };
 
     map = new google.maps.Map(document.getElementById("map"), {
@@ -49,20 +52,31 @@ function initMap() {
                     gmpClickable: true
                 });
 
-                marker.addListener("click", () => {
+                marker.addListener("click", async () => {
                     selectedPoint = point;
                     infoWindow.close();
                     infoWindow.setContent(marker.title);
                     infoWindow.open(map, marker);
-                    document.getElementById('feedingFormModal').style.display = 'block';
+                    const isAuthorized = await checkAndHandleAuthorization(); // Проверяем авторизацию
+                    if (isAuthorized) {
+                        document.getElementById('feedingFormModal').style.display = 'block';
+                    }
                 });
             });
         })
         .catch(error => console.error('Error fetching map points:', error));
 
-    map.addListener("click", (event) => {
-        currentLatLng = event.latLng;
-        document.getElementById('markerFormModal').style.display = 'block';
+    map.addListener("click", async (event) => {
+        const isAuthorized = await checkAndHandleAuthorization(); // Проверяем авторизацию
+
+        currentLatLng = event.latLng; // Получаем текущие координаты клика
+
+        if (isAuthorized) {
+            // Пользователь авторизован, показываем форму добавления точки
+            document.getElementById('markerFormModal').style.display = 'block';
+        } else {
+            document.getElementById('loginWarningModal').style.display = 'block';
+        }
     });
 }
 
@@ -94,6 +108,10 @@ async function loadGoogleMaps() {
 
 //добавить только для зарегестрированных пользоватлей
 async function saveMarker(latLng, name, number_of_cats) {
+
+    const isAuthorized = await checkAndHandleAuthorization(); // Проверяем авторизацию
+    if (!isAuthorized) return; // Если не авторизован, выходим из функции
+
     try {
         const response = await fetch('/api/add_point', {
             method: 'POST',
@@ -118,6 +136,10 @@ async function saveMarker(latLng, name, number_of_cats) {
 
 //добавить только для зарегестрированных пользоватлей
 async function addFeeding(point, userId) {
+
+    const isAuthorized = await checkAndHandleAuthorization(); // Проверяем авторизацию
+    if (!isAuthorized) return; // Если не авторизован, выходим из функции
+
     try {
         const feeding_timestamp = document.getElementById('feeding_date').value;
         const response = await fetch('/api/feedings', {
@@ -155,6 +177,10 @@ document.getElementById('cancelButton').addEventListener('click', () => {
     document.getElementById('markerFormModal').style.display = 'none';
 });
 
+document.getElementById('cancelButtonWarningModal').addEventListener('click', () => {
+    document.getElementById('loginWarningModal').style.display = 'none';
+});
+
 document.getElementById('feedingForm').addEventListener('submit', async (event) => {
     event.preventDefault();
     await addFeeding(selectedPoint, userId);
@@ -164,5 +190,5 @@ document.getElementById('feedingForm').addEventListener('submit', async (event) 
 document.getElementById('cancelFeedingButton').addEventListener('click', () => {
     document.getElementById('feedingFormModal').style.display = 'none';
 });
-
+window.initMap = initMap;
 loadGoogleMaps();
