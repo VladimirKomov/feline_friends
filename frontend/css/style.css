@@ -203,6 +203,21 @@ button[type="submit"]:hover {
     margin-left: 30px;
 }
 
+#feeding_date {
+    background-color: #f0f0f0; /* Цвет фона */
+    border: 2px solid #4CAF50; /* Рамка */
+    border-radius: 5px; /* Закругленные углы */
+    padding: 10px; /* Внутренний отступ */
+    font-size: 16px; /* Размер шрифта */
+    color: #333; /* Цвет текста */
+}
+
+#feeding_date:focus {
+    outline: none; /* Убирает стандартную обводку при фокусе */
+    border-color: #008CBA; /* Цвет рамки при фокусе */
+    box-shadow: 0 0 5px rgba(0, 140, 186, 0.5); /* Тень при фокусе */
+}
+
 /* Styles for closing the form */
 .close {
     background-color: #d1172a;
@@ -221,6 +236,7 @@ button[type="submit"]:hover {
 #loginWarningModal button[type="button"]:hover{
     background-color: #98242f;
 }
+
 
 /*++++++++++++*/
 .modal {

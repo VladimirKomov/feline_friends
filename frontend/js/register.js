@@ -56,7 +56,6 @@ registerForm.addEventListener('submit', async function(event) {
                 }
             }).then(() => {
                 // After closing the modal, redirect to index.html
-                //DON'T FORGET TO CHANGE!!!!!!!!!!!!!!
                 window.location.href = '/index.html';
             });
         } else {

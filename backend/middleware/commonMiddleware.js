@@ -16,7 +16,7 @@ export const errorHandler = (err, req, res, next) => {
 };
 
 // Middleware for token verification
-export const checkTokenExists = (req, res, next) => {
+export const tokenHandler = (req, res, next) => {
     const authHeader = req.headers['authorization'];
 
     // Check if the Authorization header was provided
@@ -34,7 +34,8 @@ export const checkTokenExists = (req, res, next) => {
     // Verify the validity of the token
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) {
-            return res.status(403).json({success: false, message: 'Token is invalid or expired'});
+            console.error('Token is invalid or expired', err);
+            return res.status(403).json({ success: false, message: 'Token is invalid or expired' });
         }
 
         req.user = user;
