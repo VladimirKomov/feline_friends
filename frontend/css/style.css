@@ -305,3 +305,8 @@ button[type="submit"]:hover {
         text-align: center; /* Center alignment */
     }
 }
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
