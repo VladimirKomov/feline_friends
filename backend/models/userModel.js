@@ -98,34 +98,22 @@ export async function fetchToken(data) {
 }
 
 
-// export async function fetchAllUsers() {
-//     try {
-//         return await db("users").select("*");
-//     } catch (error) {
-//         console.error('fetchAllUsers error: ', error);
-//         throw error;
-//     }
-// }
-//
-// export async function fetchUserById(userId) {
-//     try {
-//         return await db("users")
-//             .where('id', userId)
-//             .first();
-//     } catch (error) {
-//         console.error('fetchUserById error: ', error);
-//         throw error;
-//     }
-// }
-//
-// export async function updateUser(userId, user) {
-//     try {
-//         return  await db("users")
-//             .where('id', userId)
-//             .update(user)
-//             .returning('*');
-//     } catch (error) {
-//         console.error('updateUser error: ', error);
-//         throw error;
-//     }
-// }
+export async function fetchAllUsers() {
+    try {
+        return await db("users").select("*");
+    } catch (error) {
+        console.error('fetchAllUsers error: ', error);
+        throw error;
+    }
+}
+
+export async function fetchUserById(userId) {
+    try {
+        return await db("users")
+            .where('id', userId)
+            .first();
+    } catch (error) {
+        console.error('fetchUserById error: ', error);
+        throw error;
+    }
+}
