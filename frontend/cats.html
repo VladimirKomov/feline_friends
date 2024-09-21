@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map with Markers and Form</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/cropperjs/dist/cropper.min.css" />
+  <style>
+    #map { height: 600px; }
+    #addCatForm { display: none; } /* Форма скрыта по умолчанию */
+    #image { max-width: 100%; display: none; }
+    #croppedResult img { max-width: 300px; max-height: 300px; }
+  </style>
+</head>
+<body>
+<div id="map"></div>
+
+<form id="addCatForm" enctype="multipart/form-data">
+  <div id = "cropImage"> Crop Image
+    <input type="file" id="inputImage" accept="image/*" />
+    <br>
+    <div id="imageContainer">
+      <img id="image" src="" alt="" />
+    </div>
+    <button id="cropButton">Crop and Upload</button>
+    <div id="croppedResult"></div>
+  </div>
+  <output id = "url"></output>
+  <label for="description">Description:</label>
+  <textarea id="description" name="description" required></textarea>
+
+  <label for="healthIssues">Health Issues:</label>
+  <textarea id="healthIssues" name="healthIssues"></textarea>
+
+  <input type="hidden" id="pointId" name="pointId" />
+
+  <button type="submit">Add Cat</button>
+</form>
+
+<script src="js/combineMapsCats.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
+<script src="js/test.js"></script>
+<!--<script>-->
+
+<!--  const inputImage = document.getElementById('inputImage');-->
+<!--  const image = document.getElementById('image');-->
+<!--  const cropButton = document.getElementById('cropButton');-->
+<!--  const croppedResult = document.getElementById('croppedResult');-->
+<!--  let cropper;-->
+
+<!--  inputImage.addEventListener('change', function(event) {-->
+<!--    const file = event.target.files[0];-->
+<!--    if (file) {-->
+<!--      const reader = new FileReader();-->
+<!--      reader.onload = function(e) {-->
+<!--        image.src = e.target.result;-->
+<!--        image.style.display = 'block';-->
+<!--        if (cropper) {-->
+<!--          cropper.destroy();-->
+<!--        }-->
+<!--        cropper = new Cropper(image, {-->
+<!--          aspectRatio: 1, // Пропорция обрезки 1:1-->
+<!--          viewMode: 1-->
+<!--        });-->
+<!--      };-->
+<!--      reader.readAsDataURL(file);-->
+<!--    }-->
+<!--  });-->
+
+<!--  cropButton.addEventListener('click', function() {-->
+<!--    if (!cropper) return;-->
+
+<!--    const canvas = cropper.getCroppedCanvas();-->
+<!--    canvas.toBlob(function(blob) {-->
+<!--      const formData = new FormData();-->
+<!--      formData.append('image', blob);-->
+
+<!--      fetch('/img/uploadImg', {-->
+<!--        method: 'POST',-->
+<!--        body: formData-->
+<!--      })-->
+<!--              .then(response => response.json())-->
+<!--              .then(data => {-->
+<!--                const img = document.createElement('img');-->
+<!--                img.src = data.url;-->
+<!--                img.style.width = '300px';-->
+<!--                img.style.height = '300px';-->
+<!--                croppedResult.innerHTML = '';-->
+<!--                croppedResult.appendChild(img);-->
+<!--              })-->
+<!--              .catch(error => console.error('Error:', error));-->
+<!--    });-->
+<!--  });-->
+
+<!--  document.getElementById('addCatForm').addEventListener('submit', async (e) => {-->
+<!--    e.preventDefault();-->
+<!--    const formData = new FormData(e.target);-->
+
+<!--    try {-->
+<!--      const response = await fetch('/add-cat', {-->
+<!--        method: 'POST',-->
+<!--        body: formData-->
+<!--      });-->
+
+<!--      const result = await response.json();-->
+<!--      alert(result.message);-->
+<!--      if (response.ok) {-->
+<!--        document.getElementById('addCatForm').reset();-->
+<!--        document.getElementById('addCatForm').style.display = 'none';-->
+<!--        // Optionally update the map here-->
+<!--      }-->
+<!--    } catch (error) {-->
+<!--      console.error('Error adding cat:', error);-->
+<!--      alert('Failed to add cat');-->
+<!--    }-->
+<!--  });-->
+<!--</script>-->
+</body>
+</html>
