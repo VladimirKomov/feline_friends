@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import {errorHandler} from "./middleware/commonMiddleware.js";
 import {routerGoogleApi} from "./routes/googleApiRouter.js";
+import {routerImg} from "./routes/routerImg.js";
 
 // Defining ways to work with .html
 const __filename = fileURLToPath(import.meta.url);
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 app.use(express.json());
 app.use('/', routerUser);
 app.use('/api', routerGoogleApi);
+app.use('/img', routerImg);
 app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
