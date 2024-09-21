@@ -156,6 +156,7 @@ export const refreshToken = async (req, res, next) => {
 
     jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, user) => {
         if (err) {
+            console.error({error: err});
             return res.status(403).json({ success: false, message: "Refresh token is invalid or expired" });
         }
 

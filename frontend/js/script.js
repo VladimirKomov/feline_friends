@@ -1,9 +1,7 @@
-window.addEventListener('load', () => {
-    initializeApp();
-});
+window.addEventListener('load', initializeApp);
 
 // Initialize the application
-function initializeApp() {
+async function initializeApp() {
     const joinButton = document.getElementById('buttonJoinFriends');
     const loginButton = document.getElementById('login');
     const logoutButton = document.getElementById('logout');
@@ -13,16 +11,13 @@ function initializeApp() {
     const loginFormElement = document.getElementById('loginFormElement');
     const infoTextElement = document.getElementById('infoText');
 
-    renderElements(loginButton, joinButton, logoutButton, infoTextElement);
+    await renderElements(loginButton, joinButton, logoutButton, infoTextElement);
 
     // Logout event handler
-    logoutButton?.addEventListener('click', () => {
-        localStorage.clear();
-        renderElements(loginButton, joinButton, logoutButton, infoTextElement);
-    });
+    logoutButton?.addEventListener('click', handleLogout);
 
     // Event for the "Join" button
-    joinButton?.addEventListener('click', function() {
+    joinButton?.addEventListener('click', () => {
         window.location.href = '/register.html'; // Path to registration page
     });
 
@@ -37,22 +32,69 @@ function initializeApp() {
     });
 
     // Handle login form submission
-    loginFormElement?.addEventListener('submit', async function (event) {
+    loginFormElement?.addEventListener('submit', async (event) => {
         event.preventDefault();
         await handleLogin(loginForm, errorMessage, infoTextElement, loginButton, joinButton, logoutButton);
     });
 }
 
 // Logout function
-function logout() {
-    // Clear all user data from localStorage
+function handleLogout() {
+    clearUserSession();
+    window.location.href = '/index.html'; // Redirect to login or main page
+}
+
+// Clear user session
+function clearUserSession() {
     localStorage.clear();
-
-    // Redirect the user to the login page or main page
-    window.location.href = '/login.html'; // or '/index.html'
-
-    // Optionally show a logout message
     alert('You have been logged out.');
+}
+
+// Function to handle login
+async function handleLogin(loginForm, errorMessage, infoTextElement, loginButton, joinButton, logoutButton) {
+    const usernameOrEmail = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const response = await sendLoginRequest(usernameOrEmail, password);
+        const result = await response.json();
+
+        if (response.ok) {
+            saveUserSession(result.data);
+            loginForm.style.display = 'none';
+            renderElements(loginButton, joinButton, logoutButton, infoTextElement);
+        } else {
+            displayErrorMessage(errorMessage, 'Invalid username or password. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+        displayErrorMessage(errorMessage, 'Something went wrong. Please try again.');
+    }
+}
+
+// Send login request
+async function sendLoginRequest(usernameOrEmail, password) {
+    return fetch('/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ usernameOrEmail, password }),
+    });
+}
+
+// Save user session
+function saveUserSession(data) {
+    localStorage.setItem('accessToken', data.accessToken);
+    localStorage.setItem('refreshToken', data.refreshToken);
+    localStorage.setItem('username', data.username);
+    console.log('Logged in successfully!');
+}
+
+// Display error message
+function displayErrorMessage(element, message) {
+    element.style.display = 'block';
+    element.innerHTML = `<p>${message}</p>`;
 }
 
 // Function to check token validity
@@ -61,13 +103,29 @@ async function checkTokenValidity(accessToken) {
         const response = await fetch('/users/check_token', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
+                'Authorization': `Bearer ${accessToken}`,
+            },
         });
-        return response.ok; // Return true if the token is valid
+
+        if (response.status === 403) {
+            console.log('Access token is invalid, trying to refresh...');
+            const refreshToken = localStorage.getItem('refreshToken');
+            const newAccessToken = await refreshAccessToken(refreshToken); // Попробуем обновить токен
+
+            console.log('Get newAccessToken: ', newAccessToken);
+            if (newAccessToken) {
+                // Обновляем accessToken в localStorage
+                localStorage.setItem('accessToken', newAccessToken);
+                return true; // Токен успешно обновлен
+            } else {
+                return false; // Обновление токена не удалось
+            }
+        }
+
+        return response.ok; // Если accessToken валиден
     } catch (error) {
         console.error('Error checking token:', error);
-        return false; // Return false in case of an error
+        return false;
     }
 }
 
@@ -79,142 +137,51 @@ export async function refreshAccessToken(refreshToken) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ refreshToken })
+            body: JSON.stringify({ refreshToken }),
         });
 
         const result = await response.json();
-
-        if (response.ok) {
-            // Return the new accessToken
-            return result.accessToken;
-        } else {
-            console.error('Error refreshing token:', result.message);
-            return null;
-        }
+        return response.ok ? result.data : null;
     } catch (error) {
         console.error('Error during refresh token:', error);
         return null;
     }
 }
 
-// Function to update the accessToken
-async function updateAccessToken() {
-    const refreshToken = localStorage.getItem('refreshToken');
-
-    if (refreshToken) {
-        const newAccessToken = await refreshAccessToken(refreshToken);
-
-        if (newAccessToken) {
-            localStorage.setItem('accessToken', newAccessToken);
-            console.log('Access token updated successfully');
-        } else {
-            console.error('Failed to refresh access token');
-            logout();
-        }
-    } else {
-        console.error('No refresh token found');
-        logout();
-    }
-}
-
-// Function to check user authorization
-async function checkAuthorization() {
+// Function to check user authorization and refresh token if necessary
+export async function checkAuthorization() {
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
 
     if (accessToken) {
-        const isTokenValid = await checkTokenValidity(accessToken);
-
-        if (isTokenValid) {
-            return true; // Token is valid
+        if (await checkTokenValidity(accessToken)) {
+            return true;
         } else if (refreshToken) {
+            console.log('Refresh token is expired.');
             const newAccessToken = await refreshAccessToken(refreshToken);
             if (newAccessToken) {
                 localStorage.setItem('accessToken', newAccessToken);
-                return true; // Token successfully refreshed
-            } else {
-                console.error('Failed to refresh access token');
-                return false; // Token refresh failed
+                return true;
             }
         }
     }
-    console.error('Authorization failed: no valid token');
-    return false; // User is not authorized
+    return false;
 }
 
-export async function checkAndHandleAuthorization() {
-    try {
-        const isAuthorized = await checkAuthorization();
-        if (isAuthorized) {
-            return true; // User is authorized
-        } else {
-            // User is not authorized
-            return false;
-        }
-    } catch (error) {
-        console.error('Error during authorization check:', error);
-        alert('An error occurred while checking authorization. Please try again.');
-        return false;
-    }
-}
-
-
-// Function to render UI elements
+// Render UI elements based on authorization status
 async function renderElements(loginButton, joinButton, logoutButton, infoTextElement) {
-
-    const isAuthorized = await checkAndHandleAuthorization();
+    const isAuthorized = await checkAuthorization();
+    const storedUsername = localStorage.getItem('username');
 
     if (isAuthorized) {
-        const storedUsername = localStorage.getItem('username');
-        console.log('Welcome ', storedUsername);
         infoTextElement.innerHTML = `<p>Welcome back, ${storedUsername}!</p>`;
-        loginButton.style.display = 'none'; // Hide the login button
-        joinButton.style.display = 'none'; // Hide the "Join" button
-        logoutButton.style.display = 'block'; // Show the "Logout" button
+        loginButton.style.display = 'none';
+        joinButton.style.display = 'none';
+        logoutButton.style.display = 'block';
     } else {
-        // If the user is not logged in
-        loginButton.style.display = 'block'; // Show the login button
-        joinButton.style.display = 'block'; // Show the "Join" button
+        loginButton.style.display = 'block';
+        joinButton.style.display = 'block';
         infoTextElement.innerHTML = '<p>Complete Care for Tel Aviv Strays: From Food to Forever Homes</p>';
-        logoutButton.style.display = 'none'; // Hide the "Logout" button
-    }
-}
-
-// Login form handler
-async function handleLogin(loginForm, errorMessage, infoTextElement, loginButton, joinButton, logoutButton) {
-    const usernameOrEmail = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    try {
-        const response = await fetch('/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ usernameOrEmail, password })
-        });
-
-        const result = await response.json();
-        console.log('Get response', result);
-
-        if (response.ok) {
-            // Save the token and username in localStorage
-            localStorage.setItem('accessToken', result.data.accessToken);
-            localStorage.setItem('refreshToken', result.data.refreshToken);
-            localStorage.setItem('username', result.data.username);
-
-            console.log('Logged in successfully!');
-            // Close the login form
-            loginForm.style.display = 'none';
-            renderElements(loginButton, joinButton, logoutButton, infoTextElement);
-        } else {
-            // Show error message
-            errorMessage.style.display = 'block';
-            errorMessage.innerHTML = '<p>Invalid username or password.</p><p>Please try again.</p>';
-        }
-    } catch (error) {
-        console.error('Error during login:', error);
-        errorMessage.style.display = 'block';
-        errorMessage.innerHTML = '<p>Something went wrong.</p><p>Please try again.</p>';
+        logoutButton.style.display = 'none';
     }
 }

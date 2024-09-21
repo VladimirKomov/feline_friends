@@ -34,6 +34,7 @@ export const tokenHandler = (req, res, next) => {
     // Verify the validity of the token
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) {
+            console.error('Token is invalid or expired', err);
             return res.status(403).json({ success: false, message: 'Token is invalid or expired' });
         }
 
