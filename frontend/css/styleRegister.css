@@ -22,7 +22,7 @@ body {
     height: 100%;
     max-height: 800px;
     display: flex;
-    flex-direction: column; /* Вертикальная организация элементов */
+    flex-direction: column; /* Vertical alignment of elements */
     border-radius: 150px;
 }
 
@@ -34,20 +34,20 @@ body {
 
 .content {
     display: flex;
-    justify-content: space-between; /* Расположить left и right по бокам */
+    justify-content: space-between; /* Align left and right on the sides */
     flex-grow: 1;
     margin-top: 10px;
 }
 
 #left {
     /*background-color: lightgreen;*/
-    width: 48%; /* Задаем ширину для left */
+    width: 48%; /* Set width for left */
     /*padding: 10px;*/
 }
 
 #right {
     /*background-color: lightcoral;*/
-    width: 48%; /* Задаем ширину для right */
+    width: 48%; /* Set width for right */
     padding: 10px;
 }
 
@@ -55,16 +55,16 @@ body {
 
 #header {
     display: flex;
-    align-items: center; /* Выравнивание по вертикали */
-    justify-content: flex-start; /* Расположить элементы слева направо */
+    align-items: center; /* Vertical alignment */
+    justify-content: flex-start; /* Align elements from left to right */
     padding: 10px;
-    /*background-color: lightblue; !* Для примера *!*/
+    /*background-color: lightblue; !* For example *!*/
 }
 
 #logo {
     display: flex;
-    flex-direction: column; /* Разместить элементы внутри вертикально */
-    align-items: center; /* Выровнять по центру горизонтально */
+    flex-direction: column; /* Arrange elements inside vertically */
+    align-items: center; /* Center horizontally */
     /*width: 155px;*/
     /*flex-shrink: 0;*/
     /*padding-left: 40px;*/
@@ -75,13 +75,13 @@ body {
 }
 
 #logoImg {
-        width: 56px;
-        height: 46px;
-        flex-shrink: 0;
+    width: 56px;
+    height: 46px;
+    flex-shrink: 0;
 }
 
 #logoText {
-    margin-top: 5px; /* Отступ между изображением и текстом */
+    margin-top: 5px; /* Space between logo image and text */
     width: 155px;
     height: 84.375px;
     flex-shrink: 0;
@@ -94,9 +94,9 @@ body {
 }
 
 #textHeader {
-    margin-left: 20px; /* Отступ между логотипом и текстом */
+    margin-left: 20px; /* Space between the logo and text */
     display: flex;
-    flex-direction: column; /* Чтобы заголовок и текст располагались вертикально */
+    flex-direction: column; /* Stack title and text vertically */
 }
 
 #join {
@@ -143,10 +143,10 @@ body {
 
 
 #register {
-        display: flex;
-        flex-direction: column;
-        align-items: start;
-        /*margin-top: 20px;*/
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    /*margin-top: 20px;*/
 
 }
 
@@ -169,13 +169,13 @@ body {
 /*///////////////////////////////////*/
 
 .custom-success-popup {
-    background-color: #d4edda; /* Светло-зеленый фон */
-    color: #155724;            /* Темно-зеленый текст */
-    border: 1px solid #c3e6cb; /* Зеленая рамка */
+    background-color: #d4edda; /* Light green background */
+    color: #155724;            /* Dark green text */
+    border: 1px solid #c3e6cb; /* Green border */
 }
 
 .custom-confirm-button {
-    background-color: #28a745; /* Зеленый цвет кнопки */
+    background-color: #28a745; /* Green button color */
     color: white;
     border: none;
     padding: 10px 20px;
@@ -185,18 +185,18 @@ body {
 }
 
 .custom-confirm-button:hover {
-    background-color: #218838; /* Темно-зеленый цвет при наведении */
+    background-color: #218838; /* Darker green on hover */
 }
 
 .custom-error-popup {
-    background-color: #f8d7da; /* Светло-красный фон */
-    color: #721c24;            /* Темно-красный текст */
-    border: 1px solid #f5c6cb; /* Красная рамка */
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24;            /* Dark red text */
+    border: 1px solid #f5c6cb; /* Red border */
     border-radius: 50px;
 }
 
 .custom-error-button {
-    background-color: #d1172a; /* Красный цвет кнопки */
+    background-color: #d1172a; /* Red button color */
     color: white;
     border: none;
     padding: 10px 20px;
@@ -206,11 +206,11 @@ body {
 }
 
 .custom-error-button:hover {
-    background-color: #98242f; /* Темно-красный цвет при наведении */
+    background-color: #98242f; /* Darker red on hover */
 }
 
 .custom-confirm-button {
-    background-color: #1db346; /* Зеленый цвет кнопки */
+    background-color: #1db346; /* Green button color */
     color: gainsboro;
     border: none;
     padding: 10px 20px;
@@ -224,7 +224,7 @@ body {
 }
 
 .custom-error-button {
-    background-color: #d1172a; /* Красный цвет кнопки */
+    background-color: #d1172a; /* Red button color */
     color: gainsboro;
     border: none;
     padding: 10px 20px;
