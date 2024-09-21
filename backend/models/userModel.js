@@ -86,6 +86,17 @@ export async function insertToken(data) {
     }
 }
 
+export async function fetchToken(data) {
+    try {
+        return await db("refresh_tokens")
+            .where(data)
+            .first();
+    } catch (error) {
+        console.error('fetchToken error: ', error);
+        throw error;
+    }
+}
+
 
 // export async function fetchAllUsers() {
 //     try {

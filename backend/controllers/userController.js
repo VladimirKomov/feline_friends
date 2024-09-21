@@ -1,6 +1,6 @@
 import {
     addUserAndHashpwd,
-    fetchHashpwd,
+    fetchHashpwd, fetchToken,
     fetchUserByNameOrEmail, insertToken
 } from "../models/userModel.js";
 import * as console from "node:console";
@@ -14,6 +14,7 @@ import {
 } from "../mappers/userMapper.js";
 import dotenv from "dotenv";
 import * as process from "node:process";
+
 
 //getting JWT_SECRET and expiresIn
 dotenv.config();
@@ -112,35 +113,59 @@ export const getHashpwd = async (req, res, next) => {
     }
 };
 
-// export const getAllUsers = async (req, res, next) => {
-//     try {
-//         const users = await fetchAllUsers();
-//         res.status(200).json({ success: true, data: users });
-//     } catch (error) {
-//         next(error);
-//     }
-// };
-//
-// export const getUser = async (req, res, next) => {
-//     try {
-//         const userId = req.params.id;
-//         const user = await fetchUserById(userId);
-//         if (!user) {
-//             return res.status(404).json({ success: false, error: "User not found" });
-//         }
-//         res.status(200).json({ success: true, data: user });
-//     } catch (error) {
-//         next(error);
-//     }
-// };
-//
-// export const changeUser = async (req, res, next) => {
-//     try {
-//         const userId = req.params.id;
-//         const user = req.body;
-//         const updatedUser = await updateUser(userId, user);
-//         res.status(200).json({ success: true, data: updatedUser });
-//     } catch (error) {
-//         next(error);
-//     }
-// }
+export const checkTokenExists = async (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+
+    // Проверяем, был ли передан заголовок Authorization
+    if (!authHeader) {
+        return res.status(401).json({ success: false, message: 'Authorization header is missing' });
+    }
+
+    const token = authHeader.split(' ')[1]; // Извлекаем сам токен из заголовка
+
+    // Проверяем, был ли передан токен
+    if (!token) {
+        return res.status(401).json({ success: false, message: 'Token is missing' });
+    }
+
+    // Проверяем валидность токена
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+        if (err) {
+            return res.status(403).json({ success: false, message: 'Token is invalid or expired' });
+        }
+
+        // Если токен валиден, возвращаем статус 200
+        return res.status(200).json({ success: true, data : user });
+    });
+}
+
+export const refreshToken = async (req, res, next) => {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+        return res.status(400).json({ success: false, message: "Refresh token is required" });
+    }
+
+    // Проверяем наличие refreshToken в базе данных (или временном хранилище)
+    const refreshTokenDB = await fetchToken({token: refreshToken});
+    if (!refreshTokenDB) {
+        return res.status(401).json({ success: false, message: "Refresh token is invalid or expired" });
+    }
+
+    jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, user) => {
+        if (err) {
+            return res.status(403).json({ success: false, message: "Refresh token is invalid or expired" });
+        }
+
+        // Если refreshToken действителен, создаем новый accessToken
+        const newAccessToken = jwt.sign({ userId: user.userId, username: user.username }
+            , JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+
+        // Отправляем новый accessToken
+        return res.status(200).json({
+            success: true,
+            data: newAccessToken
+        });
+    });
+
+}

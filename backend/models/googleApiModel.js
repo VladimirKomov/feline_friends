@@ -71,10 +71,9 @@ export async function createFeeding(feeding) {
         .select('points.name', 'feedings.feeding_timestamp')
         .where('feedings.id', feedingId)
         .first();
-        console.log(feedingOk);
-    return feedingOk
+    return feedingOk;
 } catch (error) {
-        console.error('Error adding user to db: ', error);
+        console.error('Error adding feeding to db: ', error);
         throw error;
  }
 }
