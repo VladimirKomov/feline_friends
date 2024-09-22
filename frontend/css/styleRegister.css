@@ -10,6 +10,12 @@ body {
     align-items: center;
     width: 100vw;
     height: 100vh;
+    color: #3F4E49;
+    font-family: Inter, serif;
+}
+
+#hello {
+    font-size: 1.2em;
 }
 
 #container {
@@ -162,11 +168,17 @@ body {
     padding-left: 5px;
 }
 
-/*///////////////////////////////////////////*/
+@media (max-width: 768px) {
+    .input {
+        width: 100%; /* Расширяем на всю ширину */
+        max-width: none; /* Убираем максимальную ширину */
+    }
+    #container {
+        padding: 5px 20px; /* Уменьшенные отступы */
+        width: 100%;
+    }
+}
 
-
-
-/*///////////////////////////////////*/
 
 .custom-success-popup {
     background-color: #d4edda; /* Light green background */
