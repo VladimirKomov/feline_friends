@@ -11,20 +11,21 @@
 </head>
 <body>
     <div id="main">
+        <h2 id="instruction">To upload a cat photo, please select a point on the map.</h2>
         <div class="top-section">
             <div id="logo" class = "card">
             <img id="logoImg" src="img/LogoImg.svg" alt="Logo">
             <div id="logoText">Feline Friends TA</div>
             <button id = "addCat" class = "button" style="display: none">Add Cat</button>
             <div id="cropImage" style="display: none">
-                <button class="button" onclick="document.getElementById('inputImage').click();">
+                <button id="chooseButton" class="button" onclick="document.getElementById('inputImage').click();">
                     Choose File
                 </button>
                 <input type="file" id="inputImage" accept="image/*" onchange="handleFileChange()"/>
                 <div id="imageContainer">
                     <img id="image" src="" alt=""/>
                 </div>
-                <button class="button" id="cropButton">Crop and Upload</button>
+                <button id="cropButton" class="button">Crop and Upload</button>
                 <div id="croppedResult"></div>
             </div>
         </div>

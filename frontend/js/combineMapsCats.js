@@ -56,7 +56,7 @@ function initMap() {
                     // infoWindow.close();
                     // infoWindow.setContent(marker.title);
                     // infoWindow.open(map, marker);
-                    document.getElementById('addCat').style.display = 'flex';
+                    document.getElementById('addCat').style.display = 'block';
                 });
             });
         })

@@ -24,8 +24,13 @@ body {
     min-height: 70vh;
     border-radius: 50px;
     background: #EBE7E6;
-    padding-top: 40px;
+    padding-top: 20px;
 
+}
+
+#instruction{
+    text-align: center;
+    padding: 0px 10px 10px 10px;
 }
 
 /* Top section containing logo and map */
@@ -86,6 +91,10 @@ body {
     max-width: 300px;
     gap: 10px;
     margin-bottom: 20px;
+}
+
+#chooseButton, #cropButton {
+    margin-left: 40px;
 }
 
 #cropImage {
@@ -198,6 +207,11 @@ body {
     #description, #healthIssues {
         width: 100%;
     }
+
+    #chooseButton, #cropButton {
+        margin-left: 55px;
+    }
+
 }
 
 #addCat {
