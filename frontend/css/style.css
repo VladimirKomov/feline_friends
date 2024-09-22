@@ -62,7 +62,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    text-decoration: none;
+    /*text-decoration: none;*/
     transition: background 0.3s, box-shadow 0.3s, color 0.3s, text-decoration 0.3s;
     cursor: pointer;
     color: inherit;
