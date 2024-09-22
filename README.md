@@ -4,7 +4,7 @@
 
 ### The Feline Friends TA website can be found in the public domain at:
 
-## [Feline Friends TA](https://mighty-beach-70402-96eee71ac1d0.herokuapp.com/)
+## Visit website: [Feline Friends TA](https://mighty-beach-70402-96eee71ac1d0.herokuapp.com/)
 
 ![N|Solid](https://img.icons8.com/?size=100&id=raZsEA7peQ1p&format=png&color=000000)
 
