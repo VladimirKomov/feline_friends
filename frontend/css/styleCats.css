@@ -128,6 +128,8 @@ body {
 }
 
 #imageContainer {
+    background: url('../img/catDowl.webp') center center no-repeat;
+    background-size: cover;
     width: 100%;
     height: 20vh;
     max-width: 300px;
