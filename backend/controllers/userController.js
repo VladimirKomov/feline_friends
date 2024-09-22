@@ -14,9 +14,6 @@ import {
 } from "../mappers/userMapper.js";
 import dotenv from "dotenv";
 import * as process from "node:process";
-import res from "express/lib/response.js";
-import req from "express/lib/request.js";
-
 
 //getting JWT_SECRET and expiresIn
 dotenv.config();
