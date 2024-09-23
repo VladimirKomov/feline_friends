@@ -30,3 +30,23 @@ CREATE TABLE points (
     number_of_cats INTEGER,       -- Количество кошек в точке
     created_at TIMESTAMP DEFAULT NOW()  -- Дата и время добавлени
 );
+
+CREATE TABLE feedings (
+                          id SERIAL PRIMARY KEY,        -- Уникальный идентификатор записи кормления
+                          user_id INTEGER NOT NULL,     -- Ссылка на пользователя
+                          point_id INTEGER NOT NULL,    -- Ссылка на точку
+                          feeding_timestamp TIMESTAMP NOT NULL,   -- Дата и время кормления
+                          created_at TIMESTAMP DEFAULT NOW(),  -- Дата и время создания записи
+                          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                          FOREIGN KEY (point_id) REFERENCES points(id) ON DELETE CASCADE
+);
+
+CREATE TABLE cats (
+                      id SERIAL PRIMARY KEY,                -- Уникальный идентификатор кота
+                      point_id INTEGER NOT NULL REFERENCES points(id) ON DELETE CASCADE, -- Идентификатор точки, на которую ссылается кот
+                      description TEXT,                    -- Описание кота
+                      health_issues TEXT,                  -- Проблемы со здоровьем кота
+                      created_at TIMESTAMP DEFAULT NOW(),  -- Дата и время добавления записи
+                      image_url TEXT                       -- Ссылка на изображение в Amazon S3
+);
+

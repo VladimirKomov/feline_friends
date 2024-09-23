@@ -88,3 +88,7 @@ AWS_ACCESS_KEY_ID='your_aws_access_key_id'
 AWS_SECRET_ACCESS_KEY='your_aws_secret_access_key'
 AWS_REGION='eu-north-1'
 ```
+
+## Database Schema
+
+For information on how to create the database tables, refer to the `backend/config/create_tables.sql` file located in the project.
