@@ -65,3 +65,26 @@
 - JSON Web Token
 
 ![JSON Web Token](https://img.icons8.com/?size=100&id=rHpveptSuwDz&format=png&color=000000)
+
+### Example `.env` file
+
+Add a file named `.env` to the root of your project and copy the following settings into it (replace the values with your own):
+
+```dotenv
+PGHOST='ep-withered-tooth-a2vtyguj.eu-central-1.aws.neon.tech'
+PGDATABASE='neondb'
+PGUSER='neondb_owner'
+PGPASSWORD='your_password'
+PGPORT=5432
+PORT=3000
+JWT_SECRET='your_jwt_secret'
+JWT_EXPIRES_IN='15m'
+REFRESH_TOKEN_SECRET='your_refresh_token_secret'
+REFRESH_TOKEN_EXPIRES_IN='7d'
+KEY_GOOGLEAPI='your_google_api_key'
+MY_BUCKET_NAME='your_bucket_name'
+CAT_HOLDER='cats'
+AWS_ACCESS_KEY_ID='your_aws_access_key_id'
+AWS_SECRET_ACCESS_KEY='your_aws_secret_access_key'
+AWS_REGION='eu-north-1'
+```
