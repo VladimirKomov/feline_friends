@@ -11,6 +11,9 @@ import {routerImg} from "./routes/routerImg.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+console.log("Current working directory:", process.cwd());
+console.log("File is executing from:", __dirname);
+
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT || 3000;
