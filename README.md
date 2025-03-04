@@ -2,7 +2,7 @@
 ## Here you will find a website to help volunteers who feed and help homeless cats in Tel Aviv
 
 ### The Feline Friends TA website can be found in the public domain at:
-## Visit website: [Feline Friends TA](https://mighty-beach-70402-96eee71ac1d0.herokuapp.com/)
+## Visit website: [Feline Friends TA](https://feline-friends.onrender.com/)
 
 ![N|Solid](https://img.icons8.com/?size=100&id=raZsEA7peQ1p&format=png&color=000000)
 
